@@ -1,0 +1,110 @@
+{% extends 'login_registration.html.twig' %}
+
+{% block title %}Connexion - LocaMaison{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('typed') }}
+{% endblock %}
+
+{% block content %}
+    <!-- Icône de maison animée -->
+    <div class="flex justify-center mb-6">
+        <svg class="house-icon h-16 w-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+    </div>
+
+    <!-- Titre -->
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Bienvenue chez LocaMaison</h2>
+
+    <!-- Formulaire -->
+    <form class="space-y-6" method="post">
+        {% if error %}
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                <span class="font-medium">Oups! </span> {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+        
+        <!-- Champ Email -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Entrez votre email"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-black focus:border-black transition-all"
+                value="{{ last_username }}"
+                required
+            >
+        </div>
+
+        <!-- Champ Mot de passe -->
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Entrez votre mot de passe"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-black focus:border-black transition-all"
+                required
+            >
+        </div>
+
+        <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+        >
+
+        <!-- Remeber me -->
+        <div class="flex justify-between">
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="remember" type="checkbox" name="_remember_me" class="w-4 h-4 border border-gray-300 rounded bg-gray-50  dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
+                </div>
+                <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+            </div>
+            {# <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a> #}
+        </div>
+
+        <!-- Bouton de connexion -->
+        <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+        >
+            Ouvrir la porte
+        </button>
+    </form>
+
+    <!-- Lien d'inscription -->
+    <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-700 font-medium" data-turbo="false">Inscrivez-vous</a></p>
+    </div>
+
+    <!-- Séparateur -->
+    <div class="mt-6 relative">
+        <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">Ou</span>
+        </div>
+    </div>
+
+    <!-- Boutons de connexion sociale -->
+    <div class="mt-6 grid grid-cols-2 gap-4">
+        <button
+            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+        >
+            <img src="https://placehold.co/20x20" alt="Google" class="h-5 w-5 mr-2">
+            Google
+        </button>
+        <button
+            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+        >
+            <img src="https://placehold.co/20x20" alt="Facebook" class="h-5 w-5 mr-2">
+            Facebook
+        </button>
+    </div>
+{% endblock %}

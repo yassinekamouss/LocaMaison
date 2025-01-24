@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - LocaMaison{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+     <style>
+        /* Icône de maison animée */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .house-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('typed') }}
+{% endblock %}
+
+{% block body %}
+    <h1>Test</h1>
+{% endblock %}

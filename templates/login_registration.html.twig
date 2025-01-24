@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login|Register{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+     <style>
+        /* Icône de maison animée */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .house-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="bg-white overflow-hidden flex flex-col lg:flex-row w-full min-h-screen">
+        <!-- Partie gauche : Image thématique -->
+        <div class="lg:w-1/2 bg-cover bg-center" style="background-image: url('{{ asset('images/house.jpg') }}');">
+            <div class="h-full bg-black/30 flex items-center justify-center p-8">
+                <h2 id="typed" class="text-4xl font-bold text-white text-center fade-in float"></h2>
+            </div>
+        </div>
+
+        <!-- Partie droite : Formulaire -->
+        <div class="lg:w-1/2 p-8 my-auto mx-16">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

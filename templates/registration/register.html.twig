@@ -1,0 +1,121 @@
+{% extends 'login_registration.html.twig' %}
+
+{% block title %}Création de compte{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('typed') }}
+{% endblock %}
+
+{% block content %} 
+
+    {# Icône de maison animée #}
+    <div class="flex justify-center mb-6">
+        <svg class="house-icon h-16 w-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+    </div>
+
+    {# Titre #}
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Bienvenue chez LocaMaison</h2>
+
+    {# Affichage d'erreurs #}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            <span class="font-medium">Oups! </span> {{ flash_error }}
+        </div>
+    {% endfor %}
+
+    {# Affichage des messages flash de succès #}
+    {% for message in app.flashes('success') %}
+        <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+                <span class="font-medium">registration réussi!</span> {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Affichage des erreurs pour le formulaire complet -->
+
+    {{ form_start(registrationForm) }}
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                {{ form_label(registrationForm.last_Name) }}
+                {{ form_widget(registrationForm.last_Name) }}
+                {{ form_errors(registrationForm.last_Name, { 'attr': {'class': 'text-red-500 mt-2'} }) }}
+            </div>
+            <div>
+                {{ form_label(registrationForm.first_Name) }}
+                {{ form_widget(registrationForm.first_Name) }}
+                
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.plainPassword) }}
+            {{ form_widget(registrationForm.plainPassword) }}
+        </div>
+
+        <!-- Champ roles -->
+        <div class="mb-3">
+            {{ form_label(registrationForm.roles, null, {
+                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+            }) }}
+
+            <ul class="mt-1 items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+                {% for choice in registrationForm.roles %}
+                    <li class="shadow-sm w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                        <div class="flex items-center ps-3">
+                            {{ form_widget(choice, {
+                                'attr': {
+                                    'class': 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500'
+                                }
+                            }) }}
+                            {{ form_label(choice, null, {
+                                'label_attr': {'class': 'w-full py-3 ms-2 text-sm font-medium text-gray-900'}
+                            }) }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.phone) }}
+            {{ form_widget(registrationForm.phone) }}
+            
+        </div>
+
+        <!-- Champ agreeTerms -->
+        <div class="mt-8 mb-6">
+            <div class="flex items-center">
+                {{ form_widget(registrationForm.agreeTerms, {
+                    'attr': {
+                        'class': 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500'
+                    }
+                }) }}
+                {{ form_label(registrationForm.agreeTerms, null, {
+                    'label_attr': {'class': 'ml-2 text-sm font-medium text-gray-900'}
+                }) }}
+            </div>
+        </div>
+
+    {{ form_end(registrationForm) }}
+
+
+    {# Lien de connexion #}
+    <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">Déjà un compte ? <a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-700 font-medium" data-turbo="false">Connectez-vous</a></p>
+    </div>
+
+
+{% endblock %}
