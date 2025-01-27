@@ -2,9 +2,12 @@
 
 {% block title %}Création de compte{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('typed') }}
 {% endblock %}
 
 {% block content %} 
@@ -114,7 +117,7 @@
 
     {# Lien de connexion #}
     <div class="mt-6 text-center">
-        <p class="text-sm text-gray-600">Déjà un compte ? <a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-700 font-medium" data-turbo="false">Connectez-vous</a></p>
+        <p class="text-sm text-gray-600">Déjà un compte ? <a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-700 font-medium">Connectez-vous</a></p>
     </div>
 
 

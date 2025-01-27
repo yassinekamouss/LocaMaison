@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+    {% block main %}
+
+    <!-- Hero Section with Carousel -->
+    <section class="relative bg-gradient-to-r from-blue-400 to-indigo-500 text-white py-20">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="container mx-auto px-6 text-center relative">
+            <h2 class="text-5xl font-bold leading-tight mb-4">Publiez votre annonce et atteignez des locataires ! </h2>
+            <p class="text-xl mb-8">
+                Vous avez une maison, un appartement ou une villa à louer ?     
+            </p>
+            <button class="bg-white text-gray-900 px-8 py-3 rounded-lg text-lg hover:bg-gray-100 transition">Publier d'ici</button>
+        </div>
+    </section>
+
+
+    <div class="sticky top-16 z-20 bg-white" 
+        {{ react_component('RentalLandingPage', {} , {permanent: true}) }}>
+        Loading...
+    </div>
+
+{% endblock %}

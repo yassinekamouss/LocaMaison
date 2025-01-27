@@ -4,7 +4,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('typed') }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -79,7 +82,7 @@
 
     <!-- Lien d'inscription -->
     <div class="mt-6 text-center">
-        <p class="text-sm text-gray-600">Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-700 font-medium" data-turbo="false">Inscrivez-vous</a></p>
+        <p class="text-sm text-gray-600">Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-700 font-medium">Inscrivez-vous</a></p>
     </div>
 
     <!-- Séparateur -->
