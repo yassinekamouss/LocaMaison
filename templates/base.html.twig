@@ -14,37 +14,23 @@
         {% endblock %}
     </head>
     {# Body #}
-    <body class="" >
+    <body class="flex flex-col min-h-screen" >
     
-        <!-- Navbar -->
-        <nav class="sticky top-0 z-50 w-full bg-white">
-            <div class="container mx-auto p-3 flex justify-between items-center">
-                <a href="#" class="text-3xl font-semibold text-gray-800 hover:text-gray-600">
-                    <img src="{{ asset('images/Capture d\'écran 2025-01-25 194736.png') }}" alt="Logo"  class="h-12 w-auto">
-                </a>
-                <div class="space-x-6 hidden md:flex">
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition">Accueil</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition">Mes Annonces</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition">Contact</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition">Profil</a>
-                </div>
+        {# Navbar #}
+        <main class="flex-grow">
+            <div class="sticky top-0 z-40 bg-white"
+                {{ react_component('Navbar', { 'isAuthenticated': is_granted('IS_AUTHENTICATED_FULLY') }, { permanent: true }) }}>
+                Loading...
             </div>
-        </nav>
-
-        <main class=" ">
             {# Main content #}
             {% block main %}{% endblock %}
         </main>
 
         <!-- Footer -->
-        <footer class="w-full py-8">
+        {# <footer class="w-full py-8 bg-slate-50 mt-8">
             <div class="container mx-auto text-center text-gray-600">
                 <p>&copy; 2025 Location Maison. Tous droits réservés.</p>
-                <div class="mt-4 space-x-6">
-                    <a href="#" class="hover:text-green-500 transition">Conditions d’utilisation</a>
-                    <a href="#" class="hover:text-green-500 transition">Politique de confidentialité</a>
-                </div>
             </div>
-        </footer>
+        </footer> #}
     </body>
 </html>

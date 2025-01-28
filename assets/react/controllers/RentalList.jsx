@@ -1,9 +1,9 @@
-import React from 'react';
 import { MapPin } from 'lucide-react';
 
 export default function RentalList({ rentals }){
 
     return (
+      <>
         <div className="container mx-auto  mt-8 grid md:grid-cols-4 gap-6 -z-30">
           {rentals.length > 0 ? (
             rentals.map((rental) => (
@@ -32,8 +32,15 @@ export default function RentalList({ rentals }){
               </div>            
             ))
           ) : (
-            <p className="text-gray-500 col-span-full">Aucune propriété trouvée.</p>
+            <p className="text-gray-500 col-span-full mx-auto">Aucune propriété trouvée.</p>
           )}
+
         </div>
+        <footer class="w-full py-8 bg-slate-50 mt-8">
+            <div class="container mx-auto text-center text-gray-600">
+                <p>&copy; 2025 Location Maison. Tous droits réservés.</p>
+            </div>
+        </footer>
+      </>
     );
 };

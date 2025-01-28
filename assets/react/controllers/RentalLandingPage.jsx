@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
-import SearchSection from "./SearchSection";
+import MapComponent from "./MapComponent";
 import RentalList from "./RentalList";
+import SearchSection from "./SearchSection"; 
 
 export default function RentalLandingPage() {
     const [rentals, setRentals] = useState([]); // Stocke les biens
     const [searchQuery, setSearchQuery] = useState(""); // Stocke la requête de recherche
-    const [filteredRentals, setFilteredRentals] = useState([]); // Stocke les propriétés filtrées
+    const [filteredRentals, setFilteredRentals] = useState([]); // Stocke les biens filtrés
     const [loading, setLoading] = useState(true); // Suivi du chargement des biens
+    const [showMap, setShowMap] = useState(false); // État pour afficher la carte
 
     // Charger les biens au montage du composant
     useEffect(() => {
-        // Appeler l'API Symfony
         fetch("/propertie")
             .then((response) => {
                 if (!response.ok) {
@@ -27,11 +28,12 @@ export default function RentalLandingPage() {
                 console.error("Erreur:", error);
                 setLoading(false);
             });
-        }, []);
+    }, []);
 
     // Filtrer les biens en fonction de la requête de recherche
     useEffect(() => {
         const filtered = rentals.filter((rental) =>
+            rental.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             rental.location.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredRentals(filtered);
@@ -40,49 +42,52 @@ export default function RentalLandingPage() {
     // Fonction pour gérer la recherche
     const handleSearch = (query) => {
         setSearchQuery(query);
-        const results = rentals.filter((rental) =>
-            rental.location.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredRentals(results);
+    };
+
+    // Fonction pour basculer entre la liste et la carte
+    const handleToggleView = (isMapView) => {
+        setShowMap(isMapView);
     };
 
     return (
         <>
-            <SearchSection onSearch={handleSearch} />
-            
+            <SearchSection onSearch={handleSearch} onToggleView={handleToggleView} />
+
             {/* Affichage du chargement tant que les biens ne sont pas récupérés */}
             {loading ? (
-                <div className="container mx-auto  mt-8 grid md:grid-cols-4 gap-6">
+                <div className="container mx-auto mt-8 grid md:grid-cols-4 gap-6">
                     {Array(4).fill().map((_, index) => (
                         <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                        {/* Zone image vide avec animation */}
-                        <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden transform transition duration-300 hover:scale-105">
-                            <div className="w-full h-full bg-gray-100 animate-pulse"></div> {/* Zone image vide */}
-                        </div>
-                        <div className="p-4 bg-white">
-                            {/* Titre vide avec animation */}
-                            <div className="h-6 bg-gray-100 mb-2 animate-pulse"></div> {/* Titre vide */}
-                            <div className="flex justify-between items-center">
-                            <div className="flex items-center space-x-2 text-gray-600">
-                                {/* Icône et location vide */}
-                                <div className="w-4 h-4 bg-gray-100 animate-pulse rounded"></div>
-                                <div className="w-24 bg-gray-100 animate-pulse h-4"></div> {/* Location vide */}
+                            <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden transform transition duration-300 hover:scale-105">
+                                <div className="w-full h-full bg-gray-100 animate-pulse"></div>
                             </div>
-                            {/* Prix vide */}
-                            <div className="w-20 bg-gray-100 animate-pulse h-4"></div>
-                            </div>
-                            <div className="mt-4 flex justify-between text-sm text-gray-500">
-                            {/* Chambres et type vide */}
-                            <div className="w-16 bg-gray-100 animate-pulse h-4"></div>
-                            <div className="w-16 bg-gray-100 animate-pulse h-4"></div>
+                            <div className="p-4 bg-white">
+                                <div className="h-6 bg-gray-100 mb-2 animate-pulse"></div>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center space-x-2 text-gray-600">
+                                        <div className="w-4 h-4 bg-gray-100 animate-pulse rounded"></div>
+                                        <div className="w-24 bg-gray-100 animate-pulse h-4"></div>
+                                    </div>
+                                    <div className="w-20 bg-gray-100 animate-pulse h-4"></div>
+                                </div>
+                                <div className="mt-4 flex justify-between text-sm text-gray-500">
+                                    <div className="w-16 bg-gray-100 animate-pulse h-4"></div>
+                                    <div className="w-16 bg-gray-100 animate-pulse h-4"></div>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                    ))}            
-                </div>     
+                    ))}
+                </div>
             ) : (
-                <RentalList rentals={filteredRentals} />
+                <div className="">
+                    {showMap ? (
+                        <MapComponent rentals={filteredRentals} />
+                    ) : (
+                        <RentalList rentals={filteredRentals} />
+                    )}
+                </div>
             )}
         </>
     );
 }
+

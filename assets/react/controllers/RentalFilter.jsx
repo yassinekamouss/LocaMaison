@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Wifi, 
   Coffee, 
@@ -53,7 +53,7 @@ export default function RentalFilter({ onClose }) {
     };
 
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
+      <div className="fixed inset-0 bg-black/50 z-[1000] flex justify-center items-center">
         <div className="bg-white w-[500px] rounded-2xl shadow-2xl p-6 relative">
           {/* Bouton de fermeture */}
           <button 

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, MapPin, Sliders, List, Map } from 'lucide-react';
 import RentalFilter from './RentalFilter';
 
-export default function SearchSection({ onSearch }) {
+export default function SearchSection({ onSearch, onToggleView  }) {
     const [inputValue, setInputValue] = useState(''); // État pour gérer la valeur de l'input
     const [showMap, setShowMap] = useState(false);
     const [showFilterModal, setShowFilterModal] = useState(false); // État pour gérer le modal de filtre
@@ -17,11 +17,25 @@ export default function SearchSection({ onSearch }) {
         setShowFilterModal(false);
     };
 
+    // Fonction pour basculer entre la liste et la carte
+    const toggleView = (isMapView) => {
+        setShowMap(isMapView);
+        onToggleView(isMapView); // Appeler la fonction passée en prop
+    };
+
     return (
         <>
-            <div className="shadow-sm px-6 mt-8 mb-4 w-full mx-auto sticky top-16 z-50 bg-white">
+            <div className="shadow-sm px-6 mb-4 w-full mx-auto sticky top-16 z-40 bg-white">
                 <div className="rounded-lg mx-auto p-6 max-w-7xl">
-                    <div className="flex space-x-4">
+                    <div className="flex items-center space-x-4">
+                        {/* Bouton pour ouvrir le filtre */}
+                        <button
+                            onClick={() => setShowFilterModal(!showFilterModal)}
+                            className="bg-blue-50 text-blue-600 p-2 rounded-md hover:bg-blue-100"
+                        >
+                            <Sliders className="w-6 h-6" />
+                        </button>
+
                         {/* Input avec gestion de l'état */}
                         <div className="relative flex-grow">
                             <input
@@ -34,18 +48,10 @@ export default function SearchSection({ onSearch }) {
                             <MapPin className="absolute left-3 top-3 text-gray-400" />
                         </div>
 
-                        {/* Bouton pour ouvrir le filtre */}
-                        <button
-                            onClick={() => setShowFilterModal(!showFilterModal)}
-                            className="bg-blue-50 text-blue-600 p-2 rounded-md hover:bg-blue-100"
-                        >
-                            <Sliders className="w-6 h-6" />
-                        </button>
-
                         {/*  Toggle List/card */}
                         <div className="bg-gray-100 p-1 rounded-lg flex">
                             <button
-                                onClick={() => setShowMap(false)}
+                                onClick={() => toggleView(false)}
                                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                                 !showMap ? "bg-blue-50 shadow-sm text-blue-600" : "text-gray-600 hover:bg-gray-50"
                                 }`}
@@ -54,7 +60,7 @@ export default function SearchSection({ onSearch }) {
                                 Liste
                             </button>
                             <button
-                                onClick={() => setShowMap(true)}
+                                onClick={() => toggleView(true)}
                                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                                 showMap ? "bg-blue-50 shadow-sm text-blue-600" : "text-gray-600 hover:bg-gray-50"
                                 }`}
@@ -69,7 +75,9 @@ export default function SearchSection({ onSearch }) {
                             onClick={() => onSearch(inputValue)} 
                             className="text-white px-4 py-2 rounded-md bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center">
                             <Search className="mr-2" />
-                            Rechercher
+                            <span className='hidden md:block'>
+                                Rechercher
+                            </span>
                         </button>
                     </div>
                 </div>
