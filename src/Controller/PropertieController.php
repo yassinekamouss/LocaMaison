@@ -25,27 +25,29 @@ final class PropertieController extends AbstractController
             [ "id" => 9, "title" => "Studio centre-ville", "location" => "Tétouan", "price" => 3200, "bedrooms" => 1, "type" => "Studio", "latitude" => 35.578445, "longitude" => -5.368374 ],
             [ "id" => 10, "title" => "Riad authentique", "location" => "Essaouira", "price" => 8000, "bedrooms" => 4, "type" => "Riad", "latitude" => 31.512541, "longitude" => -9.772585 ]
         ];
-
+        
         // Convertir le tableau en json
         json_encode($rentals);
-
+        
         // Retourner un json contenant les biens
         return $this->json($rentals);
     }
-
-    #[Route('/propertie/{id}', name: 'app_propertie_show')]
+    
+    #[Route('/propertie/{id}', name: 'app_propertie_show', options:['id' => '\d+'])]
     public function show(int $id): Response
     {
         // Récuperation du bien
-        $rental = [
-            "id"=> $id, "title"=> "Appartement à Casablanca", "location"=> "Maarif", "price"=> 5000, "bedrooms"=> 3, "type"=> "Maison"
+        $propertie = [
+            "id" => 2, "title" => "Villa à Rabat", "location" => "Hay Riad", "price" => 12000, "bedrooms" => 3, "type" => "Maison", "latitude" => 34.020882, "longitude" => -6.841650
         ];
-
+        
         // Convertir le tableau en json
-        json_encode($rental);
+        json_encode($propertie);
 
         // Retourner un json contenant le bien
-        return $this->json($rental);
+        return $this->render('propertie/show.html.twig', [
+            'propertie' => $propertie
+        ]);
     }
 
     #[Route('/propertie/{id}/edit', name: 'app_propertie_edit')]

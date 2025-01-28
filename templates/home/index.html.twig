@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
-    {% block main %}
+{% block title %} LocaMais Home{% endblock %}
+{% block main %}
 
     <!-- Hero Section with Carousel -->
     {% if not is_granted('IS_AUTHENTICATED') %}

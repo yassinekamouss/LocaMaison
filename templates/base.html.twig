@@ -18,7 +18,7 @@
     
         {# Navbar #}
         <main class="flex-grow">
-            <div class="sticky top-0 z-40 bg-white"
+            <div class="sticky top-0 z-40 bg-white shadow-sm"
                 {{ react_component('Navbar', { 'isAuthenticated': is_granted('IS_AUTHENTICATED_FULLY') }, { permanent: true }) }}>
                 Loading...
             </div>

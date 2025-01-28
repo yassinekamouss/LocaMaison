@@ -41,7 +41,7 @@ export default function SearchSection({ onSearch, onToggleView  }) {
                             <input
                                 type="text"
                                 placeholder="Ville, quartier..."
-                                className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md outline-none focus:ring-1 focus:ring-black"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md outline-none focus:ring-1 focus:ring-gray-600"
                                 value={inputValue} // Liaison de l'état
                                 onChange={handleInputChange} // Mise à jour de l'état
                             />
