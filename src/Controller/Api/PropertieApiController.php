@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class PropertieController extends AbstractController
+final class PropertieApiController extends AbstractController
 {
-    #[Route('/propertie', name: 'app_propertie', methods: ['GET'])]
+    #[Route('/api/propertie', name: 'api_properties', methods: ['GET'])]
     public function index(Request $request): JsonResponse
     {
-        // Récuperation des biens
         $rentals = [
             [ "id" => 1, "title" => "Appartement à Casablanca", "location" => "Maarif", "price" => 5000, "bedrooms" => 3, "type" => "Maison", "latitude" => 33.589886, "longitude" => -7.603869 ],
             [ "id" => 2, "title" => "Villa à Rabat", "location" => "Hay Riad", "price" => 12000, "bedrooms" => 3, "type" => "Maison", "latitude" => 34.020882, "longitude" => -6.841650 ],
@@ -27,44 +25,9 @@ final class PropertieController extends AbstractController
             [ "id" => 10, "title" => "Riad authentique", "location" => "Essaouira", "price" => 8000, "bedrooms" => 4, "type" => "Riad", "latitude" => 31.512541, "longitude" => -9.772585 ]
         ];  
         
-        $response = new JsonResponse([
-            'message' => 'Success',
-            'data' => $rentals
-        ]);
+        $response = new JsonResponse($rentals);
         
         return $response;
     
-    }
-    
-    #[Route('/propertie/{id}', name: 'app_propertie_show', options:['id' => '\d+'])]
-    public function show(int $id): Response
-    {
-        // Récuperation du bien
-        $propertie = [
-            "id" => 2, "title" => "Villa à Rabat", "location" => "Hay Riad", "price" => 12000, "bedrooms" => 3, "type" => "Maison", "latitude" => 34.020882, "longitude" => -6.841650
-        ];
-        
-        // Convertir le tableau en json
-        json_encode($propertie);
-
-        // Retourner un json contenant le bien
-        return $this->render('propertie/show.html.twig', [
-            'propertie' => $propertie
-        ]);
-    }
-
-    #[Route('/propertie/{id}/edit', name: 'app_propertie_edit')]
-    public function edit(int $id): Response
-    {
-        // Récuperation du bien
-        $rental = [
-            "id"=> $id, "title"=> "Appartement à Casablanca", "location"=> "Maarif", "price"=> 5000, "bedrooms"=> 3, "type"=> "Maison"
-        ];
-
-        // Convertir le tableau en json
-        json_encode($rental);
-
-        // Retourner un json contenant le bien
-        return $this->json($rental);
     }
 }

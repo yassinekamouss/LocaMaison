@@ -18,6 +18,7 @@
         "react-dom": "^18.0",
         "regenerator-runtime": "^0.13.9",
         "tailwindcss": "^3.4.17",
+        "typed.js": "^2.0",
         "webpack": "^5.74.0",
         "webpack-cli": "^5.1.0",
         "webpack-notifier": "^1.15.0"
@@ -31,6 +32,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@radix-ui/react-scroll-area": "^1.2.2",
         "@radix-ui/react-slot": "^1.1.1",
         "@tailwindcss/postcss": "^4.0.0",
         "class-variance-authority": "^0.7.1",

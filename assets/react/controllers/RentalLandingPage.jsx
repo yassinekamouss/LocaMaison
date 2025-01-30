@@ -12,7 +12,7 @@ export default function RentalLandingPage() {
 
     // Charger les biens au montage du composant
     useEffect(() => {
-        fetch("/propertie")
+        fetch("/api/propertie")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Erreur lors du chargement des biens");
@@ -52,7 +52,7 @@ export default function RentalLandingPage() {
     return (
         <>
             <SearchSection onSearch={handleSearch} onToggleView={handleToggleView} />
-
+    
             {/* Affichage du chargement tant que les biens ne sont pas récupérés */}
             {loading ? (
                 <div className="container mx-auto mt-8 grid md:grid-cols-4 gap-6">
@@ -88,6 +88,5 @@ export default function RentalLandingPage() {
                 </div>
             )}
         </>
-    );
+    );    
 }
-

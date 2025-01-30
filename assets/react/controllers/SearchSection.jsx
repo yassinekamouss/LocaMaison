@@ -23,9 +23,11 @@ export default function SearchSection({ onSearch, onToggleView  }) {
         onToggleView(isMapView); // Appeler la fonction passée en prop
     };
 
+    console.log('search rerender');
+
     return (
         <>
-            <div className="shadow-sm px-6 mb-4 w-full mx-auto sticky top-16 z-40 bg-white">
+            <div className="shadow-sm mb-4 w-full mx-auto sticky top-16 z-40 bg-white">
                 <div className="rounded-lg mx-auto p-6 max-w-7xl">
                     <div className="flex items-center space-x-4">
                         {/* Bouton pour ouvrir le filtre */}
@@ -48,8 +50,8 @@ export default function SearchSection({ onSearch, onToggleView  }) {
                             <MapPin className="absolute left-3 top-3 text-gray-400" />
                         </div>
 
-                        {/*  Toggle List/card */}
-                        <div className="bg-gray-100 p-1 rounded-lg flex">
+                        {/* Toggle List/Card */}
+                        <div className="bg-gray-100 rounded-xl flex fixed bottom-8 left-1/2 transform -translate-x-1/2 shadow-xl px-3 py-2 items-center gap-4 z-50">
                             <button
                                 onClick={() => toggleView(false)}
                                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
@@ -69,6 +71,7 @@ export default function SearchSection({ onSearch, onToggleView  }) {
                                 Carte
                             </button>
                         </div>
+
 
                         {/* Bouton de recherche */}
                         <button

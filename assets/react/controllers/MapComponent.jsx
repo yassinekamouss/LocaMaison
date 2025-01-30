@@ -20,7 +20,7 @@ export default function MapComponent({ rentals }) {
     }, []);
 
     return (
-        <div className="p-4 bg-white">
+        <div className="p-4">
             <div
                 className={`transition-opacity duration-1000 ${
                     isMapLoaded ? "opacity-100" : "opacity-0"
@@ -30,8 +30,8 @@ export default function MapComponent({ rentals }) {
                     center={[31.7917, -7.0926]} // Centre du Maroc
                     zoom={7}
                     scrollWheelZoom={true}
-                    style={{ height: "800px", width: "100%", borderRadius: "12px", margin: "0 auto"}}
-                    className="shadow-lg border border-gray-200"
+                    style={{ height: "800px", width: "70%", margin:"0 auto", borderRadius:"15px",zIndex:"20"}}
+                    className=""
                 >
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

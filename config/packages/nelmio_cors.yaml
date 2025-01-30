@@ -1,13 +1,14 @@
 nelmio_cors:
     defaults:
-        allow_origin: ['http://localhost:8000'] 
-        allow_credentials: true
-        allow_headers: ['Content-Type', 'Authorization', 'Accept']
-        expose_headers: ['Link']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'DELETE']
+        allow_credentials: false
+        allow_origin: ['*'] # Autorise toutes les origines
+        allow_headers: ['*'] # Autorise tous les en-têtes
+        allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] # Méthodes autorisées
         max_age: 3600
     paths:
-        '^/': 
-            allow_origin: ['http://localhost:8000']
-            allow_headers: ['Content-Type', 'Authorization', 'Accept']
-            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'DELETE']
+        '^/': # Applique cette configuration à toutes les routes
+            origin_regex: true
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+            max_age: 3600

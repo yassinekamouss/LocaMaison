@@ -26,6 +26,15 @@
             "migrations/.gitignore"
         ]
     },
+    "hwi/oauth-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "20154480d558409ad3eb9de3644817c81fad2268"
+        }
+    },
     "nelmio/cors-bundle": {
         "version": "2.5",
         "recipe": {
