@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
-export default function MapComponent({ rentals }) {
+export default function MapGlobal({ rentals }) {
     const [isMapLoaded, setIsMapLoaded] = useState(false); // État pour l'animation de chargement
 
     // Icône personnalisée pour les marqueurs

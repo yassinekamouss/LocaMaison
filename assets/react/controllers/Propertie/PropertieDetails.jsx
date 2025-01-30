@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Heart, Share2, MapPin, Home, Ruler, Bath, BedDouble, Wifi, Car, Trees, CirclePlus } from 'lucide-react';
-import Map from './Map' ;
+import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-export default function PropertyDetails({rental}) {
-  const [activeImage, setActiveImage] = useState(0);
+export default function PropertyDetails({propertie}) {
+    const [activeImage, setActiveImage] = useState(0);
 
-  const images = [
-    "/images/johnson-johnson-U6Q6zVDgmSs-unsplash.jpg",
-    "/images/kara-eads-L7EwHkq1B2s-unsplash.jpg",
-    "/images/phil-hearing-IYfp2Ixe9nM-unsplash.jpg",
-    "/images/scott-webb-1ddol8rgUH8-unsplash.jpg"
-  ];
+    const images = [
+        "/images/johnson-johnson-U6Q6zVDgmSs-unsplash.jpg",
+        "/images/kara-eads-L7EwHkq1B2s-unsplash.jpg",
+        "/images/phil-hearing-IYfp2Ixe9nM-unsplash.jpg",
+        "/images/scott-webb-1ddol8rgUH8-unsplash.jpg"
+    ];
 
-  const amenities = [
-    { icon: <Wifi className="h-5 w-5" />, name: "WiFi Gratuit" },
-    { icon: <Car className="h-5 w-5" />, name: "Parking" },
-    { icon: <Trees className="h-5 w-5" />, name: "Jardin" }
-  ];
+    const amenities = [
+        { icon: <Wifi className="h-5 w-5" />, name: "WiFi Gratuit" },
+        { icon: <Car className="h-5 w-5" />, name: "Parking" },
+        { icon: <Trees className="h-5 w-5" />, name: "Jardin" }
+    ];
+
+    // Définition de l'icône personnalisée
+    const customIcon = L.icon({
+        iconUrl: '/images/house-location.png',
+        iconSize: [30, 30],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -40],
+    });
 
   return (
     <>
@@ -188,15 +198,33 @@ export default function PropertyDetails({rental}) {
             {/* Où se situe le logement */}
             <div className='mt-8'>
                 <h2 className="text-2xl font-semibold mb-4">Où se situe le logement</h2>
-                <Map rental={rental}/>
+                {/* Map  */}
+                <div className="h-[400px] rounded-lg overflow-hidden mx-auto">
+                    <MapContainer 
+                        center={[propertie.latitude, propertie.longitude]} 
+                        zoom={17} 
+                        scrollWheelZoom={false}
+                        style={{ height: '100%', width: '100%' }}
+                        className="shadow-lg border border-gray-200 mx-auto"
+                    >
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <Marker 
+                            position={[propertie.latitude, propertie.longitude]}
+                            icon={customIcon}
+                        >
+                        </Marker>
+                        <Circle 
+                            center={[propertie.latitude, propertie.longitude]}
+                            radius={50}
+                            pathOptions={{ color: 'red', fillColor: 'red', fillOpacity: 0.2 }}
+                        />
+                    </MapContainer>
+                </div>
             </div>
         </div>
-        
-        <footer className="w-full py-8 bg-slate-50 mt-8">
-            <div className="container mx-auto text-center text-gray-600">
-                <p>&copy; 2025 Location Maison. Tous droits réservés.</p>
-            </div>
-        </footer>
     </>
   );
 };

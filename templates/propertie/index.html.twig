@@ -1,7 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PropertieController!{% endblock %}
+{% block title %}
+    Mes Annonces
+{% endblock %}
 
-{% block body %}
-    <h1>PropertieController index</hh1>
+{% block main %}
+    
+    <div class="bg-gray-50"
+        {{ react_component('Annonces/MesAnnoncesPage',
+            {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
+            "annonces": annonces},
+            {permanent:true}) }}>
+        Loading...
+    </div>
+
 {% endblock %}

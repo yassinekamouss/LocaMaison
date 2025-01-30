@@ -1,6 +1,6 @@
 import { MapPin } from 'lucide-react';
 
-export default function RentalList({ rentals }){
+export default function ListBiens({ rentals }){
 
     return (
       <>
@@ -45,11 +45,6 @@ export default function RentalList({ rentals }){
           )}
 
         </div>
-        <footer className="w-full py-8 bg-slate-50 mt-8">
-            <div className="container mx-auto text-center text-gray-600">
-                <p>&copy; 2025 Location Maison. Tous droits réservés.</p>
-            </div>
-        </footer>
       </>
     );
 };

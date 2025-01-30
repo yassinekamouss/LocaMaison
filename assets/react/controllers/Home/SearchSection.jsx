@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, MapPin, Sliders, List, Map } from 'lucide-react';
-import RentalFilter from './RentalFilter';
+import FilterPropertie from './FilterPropertie';
 
 export default function SearchSection({ onSearch, onToggleView  }) {
     const [inputValue, setInputValue] = useState(''); // État pour gérer la valeur de l'input
@@ -22,8 +22,6 @@ export default function SearchSection({ onSearch, onToggleView  }) {
         setShowMap(isMapView);
         onToggleView(isMapView); // Appeler la fonction passée en prop
     };
-
-    console.log('search rerender');
 
     return (
         <>
@@ -51,7 +49,7 @@ export default function SearchSection({ onSearch, onToggleView  }) {
                         </div>
 
                         {/* Toggle List/Card */}
-                        <div className="bg-gray-100 rounded-xl flex fixed bottom-8 left-1/2 transform -translate-x-1/2 shadow-xl px-3 py-2 items-center gap-4 z-50">
+                        <div className="bg-white rounded-xl flex fixed bottom-8 left-1/2 transform -translate-x-1/2 shadow-xl px-3 py-2 items-center gap-4 z-50">
                             <button
                                 onClick={() => toggleView(false)}
                                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
@@ -87,7 +85,7 @@ export default function SearchSection({ onSearch, onToggleView  }) {
             </div>
 
             {showFilterModal && (
-                <RentalFilter onClose={handleCloseModal} />
+                <FilterPropertie onClose={handleCloseModal} />
             )}
         </>
     );

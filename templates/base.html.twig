@@ -14,23 +14,9 @@
         {% endblock %}
     </head>
     {# Body #}
-    <body class="flex flex-col min-h-screen" >
+    <body class="bg-gray-100" >
     
-        {# Navbar #}
-        <main class="flex-grow">
-            <div class="sticky top-0 z-40 bg-white shadow-sm"
-                {{ react_component('Navbar', { 'isAuthenticated': is_granted('IS_AUTHENTICATED_FULLY') }, { permanent: true }) }}>
-                Loading...
-            </div>
-            {# Main content #}
-            {% block main %}{% endblock %}
-        </main>
-
-        <!-- Footer -->
-        {# <footer class="w-full py-8 bg-slate-50 mt-8">
-            <div class="container mx-auto text-center text-gray-600">
-                <p>&copy; 2025 Location Maison. Tous droits réservés.</p>
-            </div>
-        </footer> #}
+        {% block main %}{% endblock %}
+        
     </body>
 </html>

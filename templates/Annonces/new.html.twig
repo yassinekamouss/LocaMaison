@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Créer une nouvelle annonce
+{% endblock %}
+
+{% block main %}
+
+    <div class="" 
+        {{ react_component('Annonces/NewAnnoncesPage', {"isAuthenticated": is_granted('IS_AUTHENTICATED')} , {permanent: true}) }}>
+        Loading ....
+    </div>
+
+{% endblock %}

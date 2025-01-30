@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{ propertie.title }}{% endblock %}
+
+{% block title %}
+    {{ propertie.title }}
+{% endblock %}
 
 {% block main %}
 
     <div class="bg-white" 
-        {{ react_component('Annonces', {"rental": propertie } , {permanent: true}) }}>
+        {{ react_component('Propertie/PropertiePage', 
+            {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
+            "propertie": propertie } , 
+            {permanent: true}) }}>
         Loading...
     </div>
 

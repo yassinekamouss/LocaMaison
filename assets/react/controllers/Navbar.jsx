@@ -1,12 +1,12 @@
 import { CircleUserRound, LogOut, ExternalLink, LockOpen } from 'lucide-react';
 import { useState } from 'react';
 
-export default function Navbar({ isAuthenticated }) {
+export default function Navbar({ isAuthenticated, widthLimitation }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <nav className="">
-            <div className="max-w-7xl mx-auto p-3 flex justify-between items-center">
+        <nav className="shadow-sm w-full bg-white sticky top-0 left-0 z-50">
+            <div className={`mx-auto p-3 flex justify-between items-center ${widthLimitation ? "max-w-7xl" : "px-20"}`}>
                 {/* Logo */}
                 <a href="/" className="text-3xl font-semibold text-gray-800 hover:text-gray-600">
                     <img src="/images/Capture d'écran 2025-01-25 194736.png" alt="Logo" className="h-12 w-auto" />

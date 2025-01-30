@@ -27,13 +27,9 @@ final class PropertieController extends AbstractController
             [ "id" => 10, "title" => "Riad authentique", "location" => "Essaouira", "price" => 8000, "bedrooms" => 4, "type" => "Riad", "latitude" => 31.512541, "longitude" => -9.772585 ]
         ];  
         
-        $response = new JsonResponse([
-            'message' => 'Success',
-            'data' => $rentals
-        ]);
+        $response = new JsonResponse($rentals);
         
         return $response;
-    
     }
     
     #[Route('/propertie/{id}', name: 'app_propertie_show', options:['id' => '\d+'])]
@@ -66,5 +62,26 @@ final class PropertieController extends AbstractController
 
         // Retourner un json contenant le bien
         return $this->json($rental);
+    }
+
+    #[Route("/mes-annonces", name:"app_mesannonces" , methods:['GET'])]
+    public function annonces(Request $request): Response
+    {
+        $annonces = [
+            "id" => 2, "title" => "Villa à Rabat", "location" => "Hay Riad", "price" => 12000, "bedrooms" => 3, "type" => "Maison", "latitude" => 34.020882, "longitude" => -6.841650,
+            "id" => 6, "title" => "Maison de campagne", "location" => "El Jadida", "price" => 4500, "bedrooms" => 3, "type" => "Maison", "latitude" => 33.254807, "longitude" => -8.506958,
+            "id" => 7, "title" => "Appartement familial", "location" => "Agadir", "price" => 5000, "bedrooms" => 3, "type" => "Appartement", "latitude" => 30.427755, "longitude" => -9.598107,
+            "id" => 8, "title" => "Villa luxueuse", "location" => "Oujda", "price" => 11000, "bedrooms" => 5, "type" => "Villa", "latitude" => 34.681390, "longitude" => -1.908580
+            
+        ];
+        return $this->render("propertie/index.html.twig" , [
+            "annonces" => $annonces
+        ]);
+    }
+
+    #[Route('/annonce', name:"app_create_annonce")]
+    public function annonce(Request $request): Response
+    {
+        return $this->render('Annonces/new.html.twig') ;
     }
 }
