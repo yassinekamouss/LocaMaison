@@ -1,19 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ propertie.title }}
+    Profile
 {% endblock %}
 
 {% block main %}
 
-    <div class="bg-white" 
-        {{ react_component('Propertie/PropertiePage', 
+    <div class="bg-white"
+        {{ react_component('Profile/ProfilePage',
             {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
-            "propertie": propertie },
+            "profile": "profile" },
             {permanent: true}) }}>
         Loading...
     </div>
 
-
 {% endblock %}
-

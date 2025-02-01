@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { X } from 'lucide-react';
 
-const Publier = () => {
+export default function AnnonceForm() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
-    // Informations de base
     title: '',
     type: '',
     price: '',
@@ -16,29 +17,94 @@ const Publier = () => {
     city: '',
     postalCode: '',
     
-    // Caractéristiques
     amenities: {
-      garage: false,
-      parking: false,
-      garden: false,
-      pool: false,
-      balcony: false,
-      elevator: false,
-      airConditioning: false,
-      heating: false,
-      securitySystem: false,
-      internet: false
+      Climatisation: false,
+      Chauffage: false,
+      WiFi: false,
+      Télévision: false,
+      Meublé: false,
+      Terrasse: false,
+      Parking: false,
+      Jardin: false,
+      Réfrigérateur: false,
+      Bureau: false,
+      Douche: false,
+      Piscine: false,
+      Animaux_acceptés: false
     },
     
-    // Images
     images: []
   });
+
+  const validateStep1 = () => {
+    const newErrors = {};
+    const requiredFields = ['title', 'type', 'price', 'surface', 'rooms', 'address', 'description'];
+    
+    requiredFields.forEach(field => {
+      if (!formData[field] || formData[field].trim() === '') {
+        newErrors[field] = 'Ce champ est requis';
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStep3 = () => {
+    if (formData.images.length < 4) {
+      alert('Veuillez ajouter au moins 4 images');
+      return false;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (currentStep === 1) {
+      if (validateStep1()) {
+        setCurrentStep(prev => prev + 1);
+      }
+    } else if (currentStep === 2) {
+      setCurrentStep(prev => prev + 1);
+    } else if (currentStep === 3) {
+      if (validateStep3()) {
+        handleSubmit();
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/propertie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi du formulaire');
+      }
+
+      const result = await response.json();
+      console.log('Réponse du serveur:', result);
+    } catch (error) {
+      console.error('Erreur:', error);
+    }
+  };
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+    // Effacer l'erreur quand l'utilisateur commence à taper
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: undefined
+      }));
+    }
   };
 
   const updateAmenity = (amenity) => {
@@ -102,10 +168,16 @@ const Publier = () => {
             type="text"
             value={formData.title}
             onChange={(e) => updateFormData('title', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className={`w-full p-2 border rounded-md ${
+              errors.title ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
             placeholder="Ex: Appartement T3 lumineux centre-ville"
           />
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Type de bien
@@ -113,7 +185,9 @@ const Publier = () => {
           <select
             value={formData.type}
             onChange={(e) => updateFormData('type', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className={`w-full p-2 border rounded-md ${
+              errors.type ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
           >
             <option value="">Sélectionnez un type</option>
             <option value="apartment">Appartement</option>
@@ -121,7 +195,11 @@ const Publier = () => {
             <option value="villa">Villa</option>
             <option value="studio">Studio</option>
           </select>
+          {errors.type && (
+            <p className="mt-1 text-sm text-red-500">{errors.type}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Prix
@@ -130,10 +208,16 @@ const Publier = () => {
             type="number"
             value={formData.price}
             onChange={(e) => updateFormData('price', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Prix en euros"
+            className={`w-full p-2 border rounded-md ${
+              errors.price ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
+            placeholder="Prix en Dirham"
           />
+          {errors.price && (
+            <p className="mt-1 text-sm text-red-500">{errors.price}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Surface (m²)
@@ -142,31 +226,49 @@ const Publier = () => {
             type="number"
             value={formData.surface}
             onChange={(e) => updateFormData('surface', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className={`w-full p-2 border rounded-md ${
+              errors.surface ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
             placeholder="Surface en m²"
           />
+          {errors.surface && (
+            <p className="mt-1 text-sm text-red-500">{errors.surface}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre de pièces
+            Nombre de chambres
           </label>
           <input
             type="number"
             value={formData.rooms}
             onChange={(e) => updateFormData('rooms', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className={`w-full p-2 border rounded-md ${
+              errors.rooms ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
           />
+          {errors.rooms && (
+            <p className="mt-1 text-sm text-red-500">{errors.rooms}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Chambres
+            Adresse
           </label>
           <input
-            type="number"
-            value={formData.bedrooms}
-            onChange={(e) => updateFormData('bedrooms', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            type="text"
+            value={formData.address}
+            onChange={(e) => updateFormData('address', e.target.value)}
+            className={`w-full p-2 border rounded-md ${
+              errors.address ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
+            placeholder='Ex: Casablanca 123, rue de la Liberté'
           />
+          {errors.address && (
+            <p className="mt-1 text-sm text-red-500">{errors.address}</p>
+          )}
         </div>
       </div>
 
@@ -177,34 +279,14 @@ const Publier = () => {
         <textarea
           value={formData.description}
           onChange={(e) => updateFormData('description', e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md h-32"
+          className={`w-full p-2 border rounded-md h-32 ${
+            errors.description ? 'border-red-500 bg-red-50' : 'border-gray-300'
+          }`}
           placeholder="Décrivez votre bien..."
         />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Adresse
-          </label>
-          <input
-            type="text"
-            value={formData.address}
-            onChange={(e) => updateFormData('address', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Code postal
-          </label>
-          <input
-            type="text"
-            value={formData.postalCode}
-            onChange={(e) => updateFormData('postalCode', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+        )}
       </div>
     </div>
   );
@@ -231,7 +313,7 @@ const Publier = () => {
                 className="h-4 w-4 text-blue-600 rounded"
               />
               <span className="text-gray-700 capitalize">
-                {key.replace(/([A-Z])/g, ' $1').trim()}
+                {key.replace('_', ' ')}
               </span>
             </div>
           </div>
@@ -272,7 +354,7 @@ const Publier = () => {
             </label>
           </div>
           <p className="mt-1 text-sm text-gray-500">
-            PNG, JPG jusqu'à 10MB
+            PNG, JPG jusqu'à 10MB (minimum 4 images requises)
           </p>
         </div>
       </div>
@@ -290,7 +372,7 @@ const Publier = () => {
                 onClick={() => removeImage(index)}
                 className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
               >
-                ×
+                <X className="w-4 h-4" />
               </button>
             </div>
           ))}
@@ -324,14 +406,7 @@ const Publier = () => {
             Précédent
           </button>
           <button
-            onClick={() => {
-              if (currentStep < 3) {
-                setCurrentStep(prev => prev + 1);
-              } else {
-                // Soumission du formulaire
-                console.log('Formulaire soumis:', formData);
-              }
-            }}
+            onClick={handleNext}
             className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             {currentStep === 3 ? 'Publier' : 'Suivant'}
@@ -340,6 +415,4 @@ const Publier = () => {
       </div>
     </div>
   );
-};
-
-export default Publier;
+}

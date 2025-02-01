@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../Navbar" ;
-import Publier from "../Publier";
+import AnnonceForm from "./AnnonceForm";
 
 export default function NewAnnoncesPage({isAuthenticated}){
 
@@ -10,7 +10,7 @@ export default function NewAnnoncesPage({isAuthenticated}){
             <Navbar isAuthenticated={isAuthenticated} widthLimitation={true}/>
 
             {/* Importation des form: */}
-            <Publier />
+            <AnnonceForm />
         </>
     );
 }

@@ -45,12 +45,12 @@ export default function Annonces() {
                 onClick={() => setViewMode('list')} />
           </button>
           <div className="h-6 w-px bg-gray-200 mx-2"></div>
-          <button 
+          <a href="/annonce/nouvelle" 
             className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-all transform"
           >
             <Plus className="w-5 h-5" />
             <span>Nouvelle annonce</span>
-          </button>
+          </a>
         </div>
 
           {/* Stats */}

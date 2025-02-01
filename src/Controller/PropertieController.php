@@ -10,7 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PropertieController extends AbstractController
 {
-    #[Route('/propertie', name: 'app_propertie', methods: ['GET'])]
+    // Route pour récupérer les biens
+    #[Route('/propertie', name: 'app_properties', methods: ['GET'])]
     public function index(Request $request): JsonResponse
     {
         // Récuperation des biens
@@ -31,7 +32,32 @@ final class PropertieController extends AbstractController
         
         return $response;
     }
-    
+
+    #[Route('/annonce/nouvelle', name: 'app_propertie_create_form', methods: ['GET'])]
+    public function create_form(): Response
+    {
+        return $this->render('propertie/create.html.twig');
+    }
+
+    #[Route('/propertie', name: 'app_propertie_create', methods: ['POST'])]
+    public function create(Request $request) : JsonResponse
+    {
+        // Récuperation des données
+        $data = json_decode($request->getContent(), true);
+
+        // Création d'un bien
+        $propertie = [
+            "id" => 11, "title" => $data['title'], "location" => $data['location'], "price" => $data['price'], "bedrooms" => $data['bedrooms'], "type" => $data['type'], "latitude" => $data['latitude'], "longitude" => $data['longitude']
+        ];
+
+        // Convertir le tableau en json
+        json_encode($propertie);
+
+        // Retourner un json contenant le bien
+        return $this->json($propertie, Response::HTTP_CREATED);
+    }
+
+    // Route pour afficher un bien spécifique
     #[Route('/propertie/{id}', name: 'app_propertie_show', options:['id' => '\d+'])]
     public function show(int $id): Response
     {
@@ -49,6 +75,7 @@ final class PropertieController extends AbstractController
         ]);
     }
 
+    // Route pour modifier un bien
     #[Route('/propertie/{id}/edit', name: 'app_propertie_edit')]
     public function edit(int $id): Response
     {
@@ -64,24 +91,10 @@ final class PropertieController extends AbstractController
         return $this->json($rental);
     }
 
-    #[Route("/mes-annonces", name:"app_mesannonces" , methods:['GET'])]
-    public function annonces(Request $request): Response
-    {
-        $annonces = [
-            "id" => 2, "title" => "Villa à Rabat", "location" => "Hay Riad", "price" => 12000, "bedrooms" => 3, "type" => "Maison", "latitude" => 34.020882, "longitude" => -6.841650,
-            "id" => 6, "title" => "Maison de campagne", "location" => "El Jadida", "price" => 4500, "bedrooms" => 3, "type" => "Maison", "latitude" => 33.254807, "longitude" => -8.506958,
-            "id" => 7, "title" => "Appartement familial", "location" => "Agadir", "price" => 5000, "bedrooms" => 3, "type" => "Appartement", "latitude" => 30.427755, "longitude" => -9.598107,
-            "id" => 8, "title" => "Villa luxueuse", "location" => "Oujda", "price" => 11000, "bedrooms" => 5, "type" => "Villa", "latitude" => 34.681390, "longitude" => -1.908580
-            
-        ];
-        return $this->render("propertie/index.html.twig" , [
-            "annonces" => $annonces
-        ]);
-    }
-
-    #[Route('/annonce', name:"app_create_annonce")]
+    // Route pour supprimer un bien
+    #[Route('/annonce', name:"app_propertie_create")]
     public function annonce(Request $request): Response
     {
-        return $this->render('Annonces/new.html.twig') ;
+        return $this->render('propertie/create.html.twig') ;
     }
 }

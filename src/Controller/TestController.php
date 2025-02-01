@@ -9,9 +9,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class TestController extends AbstractController
 {
 
-    #[Route(path: '/test', name: 'test_route')]
-    public function test(Request $request): Response
+    #[Route(path: '/api/all', methods: ['POST'])]
+    public function create(Request $request): Response
     {
-        return $this->render('test.html.twig');
+        // return new Response($request->getContent());
+        return $this->json(['message' => 'All is right!']);
     }
 }
