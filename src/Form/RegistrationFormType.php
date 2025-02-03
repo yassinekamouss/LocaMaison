@@ -22,7 +22,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('last_Name', TextType::class, [
+            ->add('nom', TextType::class, [
                 'attr' => [
                     'class' => 'mb-3 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-black focus:border-black transition-all',
                     'placeholder' => 'Votre nom',
@@ -34,7 +34,7 @@ class RegistrationFormType extends AbstractType
                     ])
                 ],
             ])
-            ->add('first_Name', TextType::class, [
+            ->add('prenom', TextType::class, [
                 'attr' => [
                     'class' => 'mb-3 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-black focus:border-black transition-all',
                     'placeholder' => 'Votre prénom',
@@ -79,15 +79,6 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-            ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'Pour réserver un logement pour mes séjours' => 'ROLE_LOCATAIRE',
-                    'Pour proposer mon logement à la location' => 'ROLE_PROPRIETAIRE',
-                ],
-                'expanded' => true,
-                'multiple' => true,
-                'label' => 'Vous êtes ici :',
             ])
             ->add('phone', TelType::class, [
                 'attr' => [

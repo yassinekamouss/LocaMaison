@@ -6,7 +6,7 @@ export default function Home({ isAuthenticated }) {
   return (
     <>
       {/* Importation de NavBar */}
-      <Navbar isAuthenticated={isAuthenticated} widthLimitation={true} />
+      <Navbar isAuthenticated={isAuthenticated} widthLimitation={false} />
 
       {/* Indication pour motivier les visiteurs de créer un compte */}
       {!isAuthenticated && (

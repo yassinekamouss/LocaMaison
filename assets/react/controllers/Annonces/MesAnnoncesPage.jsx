@@ -5,13 +5,14 @@ import Footer from "../Footer";
 
 export default function MesAnnoncesPage({isAuthenticated, annonces}){
 
+  const data = JSON.parse(annonces);
   return (
     <>
       {/* Navbar */}
       <Navbar isAuthenticated={isAuthenticated} widthLimitation={true}/>
 
       {/* Mes annonces */}
-      <Annonces annonces={annonces} />
+      <Annonces annonces={data} />
 
       {/* Footer */}
       <Footer />

@@ -12,9 +12,9 @@ export default function ListBiens({ rentals }){
                   className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer"
                 >
                 <div className="relative h-56 bg-gray-100 flex items-center justify-center overflow-hidden">
-                  <a href={`/propertie/${rental.id}`}>  
+                  <a href={`/bien/${rental.id}`}>  
                     <img
-                      src="/images/phil-hearing-IYfp2Ixe9nM-unsplash.jpg"
+                      src={rental.images && rental.images.length > 0 ? `/uploads/${rental.images[0].url}` : '/images/kara-eads-L7EwHkq1B2s-unsplash.jpg'}
                       alt="House Image"
                       className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
                     />
@@ -25,13 +25,13 @@ export default function ListBiens({ rentals }){
                   <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
                     <div className="flex items-center space-x-2">
                       <MapPin className="w-5 h-5 text-blue-600" />
-                      <span>{rental.location}</span>
+                      <span>{rental.ville}</span>
                     </div>
-                    <span className="font-semibold text-lg text-gray-600">{rental.price} MAD/mois</span>
+                    <span className="font-semibold text-lg text-gray-600">{rental.prix} MAD/mois</span>
                   </div>
                   <div className="flex justify-between items-center text-gray-500 text-sm">
                     <div className="flex items-center space-x-2">
-                      <span className="font-medium">{rental.bedrooms}</span>
+                      <span className="font-medium">{rental.chambres}</span>
                       <span>chambres</span>
                     </div>
                     <span className="bg-gray-400 text-white text-xs font-medium px-3 py-1 rounded-full shadow">{rental.type}</span>

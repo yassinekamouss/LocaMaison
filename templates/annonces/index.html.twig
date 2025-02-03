@@ -6,10 +6,10 @@
 
 {% block main %}
     
-    <div class="bg-gray-50"
+    <div class="bg-gray-100"
         {{ react_component('Annonces/MesAnnoncesPage',
             {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
-            "annonces": annonces},
+            "annonces": annonces|json_encode|raw},
             {permanent:true}) }}>
         Loading...
     </div>

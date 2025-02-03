@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -19,64 +20,69 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user.index'])]
     private ?int $id = null;
-
+    
     #[ORM\Column(length: 180)]
+    #[Groups(['user.index'])]
     private ?string $email = null;
-
+    
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
     private array $roles = [];
-
+    
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
-
+    
     #[ORM\Column(length: 50)]
-    private ?string $first_name = null;
-
+    #[Groups(['user.index'])]
+    private ?string $nom = null;
+    
     #[ORM\Column(length: 50)]
-    private ?string $last_name = null;
-
+    #[Groups(['user.index'])]
+    private ?string $prenom = null;
+    
+    
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Favori::class, orphanRemoval: true)]
+    private Collection $favoris;
+    
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
+    private Collection $sentMessages;
+    
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Message::class, orphanRemoval: true)]
+    private Collection $receivedMessages;
+    
     #[ORM\Column(length: 50)]
+    #[Groups(['user.index'])]
     private ?string $phone = null;
-
-    #[ORM\Column(name: "created_at", type: "datetime_immutable", nullable: false)]
-    private ?\DateTimeImmutable $createdAt = null;
+    
+    #[ORM\Column(name: "created_at", type: "datetime", nullable: true)]
+    private ?\DateTime $createdAt = null;
     
     #[ORM\Column(name: "updated_at", type: "datetime", nullable: true)]
     private ?\DateTime $updatedAt = null;
-
-    /**
-     * @var Collection<int, Propertie>
-     */
-    #[ORM\OneToMany(targetEntity: Propertie::class, mappedBy: 'owner_id')]
-    private Collection $properties;
-
-    /**
-     * @var Collection<int, Comments>
-     */
-    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'locataire_id')]
-    private Collection $comments;
-
-    /**
-     * @var Collection<int, Reservation>
-     */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'locataire_id')]
-    private Collection $reservations;
-
+    
+    
     #[ORM\Column]
     private ?bool $isVerified = null;
+    
+    /**
+     * @var Collection<int, Bien>
+     */
+    #[ORM\OneToMany(targetEntity: Bien::class, mappedBy: 'proprietaire')]
+    private Collection $biens;
 
     public function __construct()
     {
-        $this->properties = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
+        $this->biens = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
+        $this->sentMessages = new ArrayCollection();
+        $this->receivedMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,29 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): ?string
-    {
-        return $this->first_name;
-    }
 
-    public function setFirstName(string $first_name): static
-    {
-        $this->first_name = $first_name;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->last_name;
-    }
-
-    public function setLastName(string $last_name): static
-    {
-        $this->last_name = $last_name;
-
-        return $this;
-    }
 
     public function getPhone(): ?string
     {
@@ -190,12 +174,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -214,95 +198,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Propertie>
-     */
-    public function getProperties(): Collection
-    {
-        return $this->properties;
-    }
-
-    public function addProperty(Propertie $property): static
-    {
-        if (!$this->properties->contains($property)) {
-            $this->properties->add($property);
-            $property->setOwnerId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProperty(Propertie $property): static
-    {
-        if ($this->properties->removeElement($property)) {
-            // set the owning side to null (unless already changed)
-            if ($property->getOwnerId() === $this) {
-                $property->setOwnerId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Comments>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comments $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setLocataireId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comments $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getLocataireId() === $this) {
-                $comment->setLocataireId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Reservation>
-     */
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function addReservation(Reservation $reservation): static
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations->add($reservation);
-            $reservation->setLocataireId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): static
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getLocataireId() === $this) {
-                $reservation->setLocataireId(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function isVerified(): ?bool
     {
@@ -319,13 +214,149 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = $this->created_at ?? new \DateTimeImmutable();
+        $this->createdAt = $this->created_at ?? new \DateTime();
         $this->updatedAt = new \DateTime();
     }
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime(); 
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+        return $this;
+    }
+
+   
+    
+
+    /**
+     * @return Collection<int, Favori>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Favori $favori): self
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+            $favori->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeFavori(Favori $favori): self
+    {
+        if ($this->favoris->removeElement($favori)) {
+            if ($favori->getUser() === $this) {
+                $favori->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getSentMessages(): Collection
+    {
+        return $this->sentMessages;
+    }
+
+    public function addSentMessage(Message $message): self
+    {
+        if (!$this->sentMessages->contains($message)) {
+            $this->sentMessages->add($message);
+            $message->setSender($this);
+        }
+        return $this;
+    }
+
+    public function removeSentMessage(Message $message): self
+    {
+        if ($this->sentMessages->removeElement($message)) {
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getReceivedMessages(): Collection
+    {
+        return $this->receivedMessages;
+    }
+
+    public function addReceivedMessage(Message $message): self
+    {
+        if (!$this->receivedMessages->contains($message)) {
+            $this->receivedMessages->add($message);
+            $message->setReceiver($this);
+        }
+        return $this;
+    }
+
+    public function removeReceivedMessage(Message $message): self
+    {
+        if ($this->receivedMessages->removeElement($message)) {
+            if ($message->getReceiver() === $this) {
+                $message->setReceiver(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bien>
+     */
+    public function getBiens(): Collection
+    {
+        return $this->biens;
+    }
+
+    public function addBien(Bien $bien): static
+    {
+        if (!$this->biens->contains($bien)) {
+            $this->biens->add($bien);
+            $bien->setProprietaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBien(Bien $bien): static
+    {
+        if ($this->biens->removeElement($bien)) {
+            // set the owning side to null (unless already changed)
+            if ($bien->getProprietaire() === $this) {
+                $bien->setProprietaire(null);
+            }
+        }
+
+        return $this;
     }
 
 }

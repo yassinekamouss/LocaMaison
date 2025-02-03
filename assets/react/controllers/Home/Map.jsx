@@ -40,7 +40,7 @@ export default function MapGlobal({ rentals }) {
                     {rentals.map((rental) => (
                         <Marker
                             key={rental.id}
-                            position={[rental.latitude, rental.longitude]} // Coordonnées du bien
+                            position={[rental.latitude, rental.longtitude]} // Coordonnées du bien
                             icon={customIcon}
                             eventHandlers={{
                                 click: (e) => {
@@ -52,29 +52,29 @@ export default function MapGlobal({ rentals }) {
                                 <div className=" w-[100] h-[100]">
                                     {/* Titre */}
                                     <strong className="text-lg font-semibold text-gray-800">
-                                        {rental.title}
+                                        {rental.titre}
                                     </strong>{" "}
                                     <br />
 
                                     {/* Image cliquable */}
                                     <a
-                                        href={`/biens/${rental.id}`} // Lien vers la page du bien
+                                        href={`/bien/${rental.id}`} // Lien vers la page du bien
                                         target="_blank" // Ouvrir dans un nouvel onglet
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="images/house.jpg" // Remplacez par le chemin de votre image
-                                            alt={rental.title} // Texte alternatif pour l'accessibilité
+                                            src={rental.images && rental.images.length > 0 ? `/uploads/${rental.images[0].url}` : '/images/kara-eads-L7EwHkq1B2s-unsplash.jpg'}
+                                            alt={rental.titre} // Texte alternatif pour l'accessibilité
                                             className="w-full h-32 object-cover rounded-sm shadow-sm mb-4 cursor-pointer hover:opacity-90 transition-opacity" // Styles modernes
                                         />
                                     </a>
 
                                     {/* Localisation */}
-                                    <span className="text-gray-600">{rental.location}</span> <br />
+                                    <span className="text-gray-600">{rental.ville}</span> <br />
 
                                     {/* Prix */}
                                     <span className="text-blue-600 font-bold">
-                                        Prix : {rental.price} MAD
+                                        Prix : {rental.prix} MAD
                                     </span>
 
                                     {/* Bouton pour fermer le popup */}

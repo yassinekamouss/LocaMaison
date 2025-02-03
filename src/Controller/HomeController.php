@@ -16,15 +16,8 @@ final class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
-
-
-    #[Route('/about', name: 'app_about')]
-    public function about(): Response
-    {
-        return $this->render('test.html.twig');
-    }
-
-    #[Route('/test', name: 'app_test' , methods:'POST')]
+    
+    #[Route('/testfile', name: 'app_test' , methods:'POST')]
     public function uploadImage(Request $request): JsonResponse
     {
         // Récupérer le fichier envoyé

@@ -41,12 +41,10 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            // Récupérer les rôles sélectionnés et les assigner à l'utilisateur
-            $roles = $form->get('roles')->getData();
-            $user->setRoles($roles); // Assurez-vous que setRoles() peut accepter un tableau
+            $user->setRoles(["ROLE_USER"]); 
 
             // Définir les dates createdAt et updatedAt
-            $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setCreatedAt(new \DateTime());
             $user->setUpdatedAt(new \DateTime);
 
             // Définir le statut de l'utilisateur

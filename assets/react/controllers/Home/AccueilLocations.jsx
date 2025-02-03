@@ -12,7 +12,7 @@ export default function AccueilLocations() {
 
     // Charger les biens au montage du composant
     useEffect(() => {
-        fetch("/propertie")
+        fetch("/biens")
         .then((response) => {
             if (!response.ok) {
             throw new Error("Erreur lors du chargement des biens");
@@ -23,6 +23,7 @@ export default function AccueilLocations() {
             setRentals(data);
             setFilteredRentals(data);
             setLoading(false);
+            console.log(data);
         })
         .catch((error) => {
             console.error("Erreur:", error);
@@ -34,8 +35,8 @@ export default function AccueilLocations() {
     useEffect(() => {
         const filtered = rentals.filter(
         (rental) =>
-            rental.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            rental.location.toLowerCase().includes(searchQuery.toLowerCase())
+            rental.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            rental.ville.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredRentals(filtered);
     }, [searchQuery, rentals]);
@@ -57,7 +58,7 @@ export default function AccueilLocations() {
         {/* Affichage du chargement tant que les biens ne sont pas récupérés */}
         {loading ? (
             <div className="container mx-auto mt-8 grid md:grid-cols-4 gap-6">
-            {Array(4)
+            {Array(8)
                 .fill()
                 .map((_, index) => (
                 <div

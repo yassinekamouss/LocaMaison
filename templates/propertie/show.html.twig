@@ -1,19 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ propertie.title }}
+    {{ bien.titre }}
 {% endblock %}
 
 {% block main %}
-
     <div class="bg-white" 
         {{ react_component('Propertie/PropertiePage', 
-            {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
-            "propertie": propertie },
+            {
+                "isAuthenticated": is_granted('IS_AUTHENTICATED'),
+                "propertie": bien|json_encode|raw,
+            },
             {permanent: true}) }}>
         Loading...
     </div>
-
-
 {% endblock %}
-
