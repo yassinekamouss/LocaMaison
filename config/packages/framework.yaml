@@ -2,6 +2,15 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    http_method_override: true
+
+    validation:
+        enabled: true
+        
+    request:
+        formats:
+            multipart: ['multipart/form-data']
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 

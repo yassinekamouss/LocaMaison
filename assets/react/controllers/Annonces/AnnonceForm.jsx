@@ -1,47 +1,45 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Check } from 'lucide-react';
+import axios from 'axios';
 
 export default function AnnonceForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
-    title: '',
+  const [equipementsList, setEquipementsList] = useState([]); 
+  const [formDonnees, setFormDonnees] = useState({
+    titre: '',
     type: '',
-    price: '',
+    prix: '',
     surface: '',
-    rooms: '',
-    bedrooms: '',
-    bathrooms: '',
+    chambres: '',
     description: '',
     address: '',
-    city: '',
-    postalCode: '',
-    
-    amenities: {
-      Climatisation: false,
-      Chauffage: false,
-      WiFi: false,
-      Télévision: false,
-      Meublé: false,
-      Terrasse: false,
-      Parking: false,
-      Jardin: false,
-      Réfrigérateur: false,
-      Bureau: false,
-      Douche: false,
-      Piscine: false,
-      Animaux_acceptés: false
-    },
-    
+    ville: '',
+    latitude: '',
+    longtitude: '',
+    equipements: [],
     images: []
   });
+  // Récupération des équipements depuis l'API Symfony
+  useEffect(() => {
+    const fetchEquipements = async () => {
+        try {
+            const response = await axios.get('/equipements'); // Use axios.get
+            setEquipementsList(response.data); // Access data with response.data
+        } catch (error) {
+            console.error('Erreur lors de la récupération des équipements:', error); // Improved error message
+        }
+    };
+
+    fetchEquipements();
+}, []);
 
   const validateStep1 = () => {
     const newErrors = {};
-    const requiredFields = ['title', 'type', 'price', 'surface', 'rooms', 'address', 'description'];
+    const requiredFields = ['titre', 'type', 'prix', 'surface', 'chambres', 'address', 'latitude', 'longtitude', 'description'];
     
     requiredFields.forEach(field => {
-      if (!formData[field] || formData[field].trim() === '') {
+      if (!formDonnees[field] || formDonnees[field].trim() === '') {
         newErrors[field] = 'Ce champ est requis';
       }
     });
@@ -51,14 +49,15 @@ export default function AnnonceForm() {
   };
 
   const validateStep3 = () => {
-    if (formData.images.length < 4) {
+    if (formDonnees.images.length < 4) {
       alert('Veuillez ajouter au moins 4 images');
       return false;
     }
     return true;
   };
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault();
     if (currentStep === 1) {
       if (validateStep1()) {
         setCurrentStep(prev => prev + 1);
@@ -73,28 +72,60 @@ export default function AnnonceForm() {
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await fetch('/propertie', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+      const formDataToSend = new FormData();
+      // Récupération des donées de base 
+      formDataToSend.append('titre', formDonnees.titre);
+      formDataToSend.append('type', formDonnees.type);
+      formDataToSend.append('prix', formDonnees.prix);
+      formDataToSend.append('ville', 'Casablanca');
+      formDataToSend.append('surface', formDonnees.surface);
+      formDataToSend.append('chambres', formDonnees.chambres);
+      formDataToSend.append('description', formDonnees.description);
+      formDataToSend.append('address', formDonnees.address);
+      formDataToSend.append('latitude', formDonnees.latitude);
+      formDataToSend.append('longtitude', formDonnees.longtitude);
+      
+      // Ajouter les équipements
+      formDonnees.equipements.forEach(equipement => {
+        formDataToSend.append('equipements[]', equipement.id);
       });
 
-      if (!response.ok) {
-        throw new Error('Erreur lors de l\'envoi du formulaire');
-      }
-
-      const result = await response.json();
-      console.log('Réponse du serveur:', result);
-    } catch (error) {
-      console.error('Erreur:', error);
-    }
+      // Ajouter les images
+      formDonnees.images.forEach(image => {
+        formDataToSend.append('images[]', image);
+      });
+      
+      axios.post('/bien', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        console.log('Réponse :', response.data);
+        // Reset form data
+        setFormDonnees({
+          titre: '',
+          type: '',
+          prix: '',
+          surface: '',
+          chambres: '',
+          description: '',
+          address: '',
+          ville: '',
+          latitude: '',
+          longtitude: '',
+          equipements: [],
+          images: []
+        });
+        setCurrentStep(1);
+      })
+      .catch(error => {
+        console.error('Erreur :', error.response?.data || error.message);
+      });
   };
 
   const updateFormData = (field, value) => {
-    setFormData(prev => ({
+    setFormDonnees(prev => ({
       ...prev,
       [field]: value
     }));
@@ -107,26 +138,29 @@ export default function AnnonceForm() {
     }
   };
 
-  const updateAmenity = (amenity) => {
-    setFormData(prev => ({
-      ...prev,
-      amenities: {
-        ...prev.amenities,
-        [amenity]: !prev.amenities[amenity]
-      }
-    }));
+  const updateEquipements = (equipement) => {
+    setFormDonnees((prevFormData) => {
+      const isSelected = prevFormData.equipements.some(e => e.id === equipement.id);
+  
+      return {
+        ...prevFormData,
+        equipements: isSelected
+          ? prevFormData.equipements.filter(e => e.id !== equipement.id) // Supprimer si déjà sélectionné
+          : [...prevFormData.equipements, equipement], // Ajouter sinon
+      };
+    });
   };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    setFormData(prev => ({
+    setFormDonnees(prev => ({
       ...prev,
       images: [...prev.images, ...files]
     }));
   };
 
   const removeImage = (index) => {
-    setFormData(prev => ({
+    setFormDonnees(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
@@ -166,15 +200,15 @@ export default function AnnonceForm() {
           </label>
           <input
             type="text"
-            value={formData.title}
-            onChange={(e) => updateFormData('title', e.target.value)}
+            value={formDonnees.titre}
+            onChange={(e) => updateFormData('titre', e.target.value)}
             className={`w-full p-2 border rounded-md ${
-              errors.title ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              errors.titre ? 'border-red-500 bg-red-50' : 'border-gray-300'
             }`}
             placeholder="Ex: Appartement T3 lumineux centre-ville"
           />
-          {errors.title && (
-            <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+          {errors.titre && (
+            <p className="mt-1 text-sm text-red-500">{errors.titre}</p>
           )}
         </div>
 
@@ -183,15 +217,15 @@ export default function AnnonceForm() {
             Type de bien
           </label>
           <select
-            value={formData.type}
+            value={formDonnees.type}
             onChange={(e) => updateFormData('type', e.target.value)}
             className={`w-full p-2 border rounded-md ${
               errors.type ? 'border-red-500 bg-red-50' : 'border-gray-300'
             }`}
           >
             <option value="">Sélectionnez un type</option>
-            <option value="apartment">Appartement</option>
-            <option value="house">Maison</option>
+            <option value="apartement">Appartement</option>
+            <option value="maison">Maison</option>
             <option value="villa">Villa</option>
             <option value="studio">Studio</option>
           </select>
@@ -206,15 +240,15 @@ export default function AnnonceForm() {
           </label>
           <input
             type="number"
-            value={formData.price}
-            onChange={(e) => updateFormData('price', e.target.value)}
+            value={formDonnees.prix}
+            onChange={(e) => updateFormData('prix', e.target.value)}
             className={`w-full p-2 border rounded-md ${
-              errors.price ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              errors.prix ? 'border-red-500 bg-red-50' : 'border-gray-300'
             }`}
             placeholder="Prix en Dirham"
           />
-          {errors.price && (
-            <p className="mt-1 text-sm text-red-500">{errors.price}</p>
+          {errors.prix && (
+            <p className="mt-1 text-sm text-red-500">{errors.prix}</p>
           )}
         </div>
 
@@ -224,7 +258,7 @@ export default function AnnonceForm() {
           </label>
           <input
             type="number"
-            value={formData.surface}
+            value={formDonnees.surface}
             onChange={(e) => updateFormData('surface', e.target.value)}
             className={`w-full p-2 border rounded-md ${
               errors.surface ? 'border-red-500 bg-red-50' : 'border-gray-300'
@@ -242,14 +276,15 @@ export default function AnnonceForm() {
           </label>
           <input
             type="number"
-            value={formData.rooms}
-            onChange={(e) => updateFormData('rooms', e.target.value)}
+            placeholder='Ex: 3'
+            value={formDonnees.chambres}
+            onChange={(e) => updateFormData('chambres', e.target.value)}
             className={`w-full p-2 border rounded-md ${
-              errors.rooms ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              errors.chambres ? 'border-red-500 bg-red-50' : 'border-gray-300'
             }`}
           />
-          {errors.rooms && (
-            <p className="mt-1 text-sm text-red-500">{errors.rooms}</p>
+          {errors.chambres && (
+            <p className="mt-1 text-sm text-red-500">{errors.chambres}</p>
           )}
         </div>
 
@@ -259,7 +294,7 @@ export default function AnnonceForm() {
           </label>
           <input
             type="text"
-            value={formData.address}
+            value={formDonnees.address}
             onChange={(e) => updateFormData('address', e.target.value)}
             className={`w-full p-2 border rounded-md ${
               errors.address ? 'border-red-500 bg-red-50' : 'border-gray-300'
@@ -270,6 +305,43 @@ export default function AnnonceForm() {
             <p className="mt-1 text-sm text-red-500">{errors.address}</p>
           )}
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Latitude
+          </label>
+          <input
+            type="number"
+            placeholder='Ex: 33.5899'
+            value={formDonnees.latitude}
+            onChange={(e) => updateFormData('latitude', e.target.value)}
+            className={`w-full p-2 border rounded-md ${
+              errors.latitude ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
+          />
+          {errors.latitude && (
+            <p className="mt-1 text-sm text-red-500">{errors.latitude}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Longtitude
+          </label>
+          <input
+            type="number"
+            value={formDonnees.longtitude}
+            onChange={(e) => updateFormData('longtitude', e.target.value)}
+            className={`w-full p-2 border rounded-md ${
+              errors.longtitude ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
+            placeholder='Ex: -7.62763'
+          />
+          {errors.longtitude && (
+            <p className="mt-1 text-sm text-red-500">{errors.longtitude}</p>
+          )}
+        </div>
+
       </div>
 
       <div>
@@ -277,7 +349,7 @@ export default function AnnonceForm() {
           Description
         </label>
         <textarea
-          value={formData.description}
+          value={formDonnees.description}
           onChange={(e) => updateFormData('description', e.target.value)}
           className={`w-full p-2 border rounded-md h-32 ${
             errors.description ? 'border-red-500 bg-red-50' : 'border-gray-300'
@@ -291,29 +363,31 @@ export default function AnnonceForm() {
     </div>
   );
 
-  const renderAmenitiesStep = () => (
+  const renderequipementsStep = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">
         Équipements et caractéristiques
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {Object.entries(formData.amenities).map(([key, value]) => (
+        {equipementsList.map((equipement) => (
           <div
-            key={key}
-            onClick={() => updateAmenity(key)}
+            key={equipement.id}
+            onClick={() => updateEquipements(equipement)}
             className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-              value ? 'bg-blue-50 border-blue-500' : 'border-gray-200 hover:bg-gray-50'
+              formDonnees.equipements.some(e => e.id === equipement.id)
+                ? "bg-blue-50 border-blue-500"
+                : "border-gray-200 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
-                checked={value}
-                onChange={() => {}}
+                checked={formDonnees.equipements.some(e => e.id === equipement.id)}
+                onChange={() => updateEquipements(equipement)}
                 className="h-4 w-4 text-blue-600 rounded"
               />
               <span className="text-gray-700 capitalize">
-                {key.replace('_', ' ')}
+                {equipement.nom}
               </span>
             </div>
           </div>
@@ -359,9 +433,9 @@ export default function AnnonceForm() {
         </div>
       </div>
 
-      {formData.images.length > 0 && (
+      {formDonnees.images.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          {formData.images.map((image, index) => (
+          {formDonnees.images.map((image, index) => (
             <div key={index} className="relative">
               <img
                 src={URL.createObjectURL(image)}
@@ -389,29 +463,30 @@ export default function AnnonceForm() {
         </h1>
 
         {renderStepIndicator()}
+        <form method="post">
+          <div className="mt-8">
+            {currentStep === 1 && renderBasicInfoStep()}
+            {currentStep === 2 && renderequipementsStep()}
+            {currentStep === 3 && renderImagesStep()}
+          </div>
 
-        <div className="mt-8">
-          {currentStep === 1 && renderBasicInfoStep()}
-          {currentStep === 2 && renderAmenitiesStep()}
-          {currentStep === 3 && renderImagesStep()}
-        </div>
-
-        <div className="mt-8 flex justify-between">
-          <button
-            onClick={() => setCurrentStep(prev => prev - 1)}
-            className={`px-6 py-2 border border-gray-300 rounded-md ${
-              currentStep === 1 ? 'invisible' : ''
-            }`}
-          >
-            Précédent
-          </button>
-          <button
-            onClick={handleNext}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            {currentStep === 3 ? 'Publier' : 'Suivant'}
-          </button>
-        </div>
+          <div className="mt-8 flex justify-between">
+            <button
+              onClick={() => setCurrentStep(prev => prev - 1)}
+              className={`px-6 py-2 border border-gray-300 rounded-md ${
+                currentStep === 1 ? 'invisible' : ''
+              }`}
+            >
+              Précédent
+            </button>
+            <button
+              onClick={handleNext}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              {currentStep === 3 ? 'Publier' : 'Suivant'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

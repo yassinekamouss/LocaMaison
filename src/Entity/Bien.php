@@ -15,51 +15,51 @@ class Bien
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'bien.crate'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'bien.crate'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'bien.crate'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'bien.crate'])]
     private ?float $prix = null;
     
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.indx', 'bien.show'])]
+    #[Groups(['bien.indx', 'bien.show','bien.crate'])]
     private ?string $adresse = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index','bien.crate'])]
     private ?string $ville = null;
     
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.show'])]
+    #[Groups(['bien.index', 'bien.show','bien.crate'])]
     private ?float $surface = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'bien.crate'])]
     private ?float $chambres = null;
     
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index' , 'bien.crate'])]
     private ?string $status = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index' , 'bien.crate'])]
     private ?string $type = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index' , 'bien.crate'])]
     private ?float $longtitude = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index' , 'bien.crate'])]
     private ?float $latitude = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -80,7 +80,7 @@ class Bien
      * @var Collection<int, Equipement>
      */
     #[ORM\ManyToMany(targetEntity: Equipement::class, mappedBy: 'bien')]
-    #[Groups(['bien.show'])]
+    #[Groups(['bien.show' ,'bien.crate'])]
     private Collection $equipements;
 
     /**
@@ -96,6 +96,7 @@ class Bien
     private Collection $favoris;
 
     #[ORM\ManyToOne(inversedBy: 'biens')]
+    // #[Groups(['bien.crate'])]
     private ?User $proprietaire = null;
 
     public function __construct()
