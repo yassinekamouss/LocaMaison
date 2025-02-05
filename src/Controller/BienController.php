@@ -7,7 +7,6 @@ use App\Entity\Equipement;
 use App\Entity\Image;
 use App\Repository\BienRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +19,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class BienController extends AbstractController
 {
     private $entityManager;
-    private $slugger;
 
     // constructor
     public function __construct(EntityManagerInterface $entityManager, SluggerInterface $slugger)
     {
         $this->entityManager = $entityManager;
-        $this->slugger = $slugger;
     }
     // Route pour récupérer les biens
     #[Route('/biens', name: 'app_biens', methods: ['GET'])]
@@ -105,7 +102,7 @@ final class BienController extends AbstractController
         return new JsonResponse([
             'message' => 'Bien créé avec succès'
         ], Response::HTTP_CREATED);
-}
+    }
 
     // Route pour afficher un bien spécifique
     #[Route('/bien/{id}', name: 'app_bien_show', options:['id' => '\d+'])]

@@ -25,5 +25,4 @@ final class EquipementController extends AbstractController
         return new JsonResponse($jsonEquipements, Response::HTTP_OK, [], true);
     }
 
-    
 }

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+    {% block main %}
+
+    <div
+        {{ react_component("Test" , {"isAuthenticated": true, "data": conversations }) }}>
+        Loading...
+    </div>
+    
+{% endblock %}

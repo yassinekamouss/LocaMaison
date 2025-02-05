@@ -15,11 +15,11 @@ class Bien
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.index', 'bien.crate'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -27,23 +27,23 @@ class Bien
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
     private ?float $prix = null;
     
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.indx', 'bien.show','bien.crate'])]
+    #[Groups(['bien.indx', 'bien.show','bien.crate', 'conversation.index'])]
     private ?string $adresse = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index','bien.crate'])]
+    #[Groups(['bien.index','bien.crate', 'conversation.index'])]
     private ?string $ville = null;
     
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.show','bien.crate'])]
+    #[Groups(['bien.index', 'bien.show','bien.crate', 'conversation.index'])]
     private ?float $surface = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
     private ?float $chambres = null;
     
     #[ORM\Column(length: 50, nullable: true)]
@@ -51,7 +51,7 @@ class Bien
     private ?string $status = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index' , 'bien.crate'])]
+    #[Groups(['bien.index' , 'bien.crate', 'conversation.index'])]
     private ?string $type = null;
 
     #[ORM\Column]

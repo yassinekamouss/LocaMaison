@@ -21,7 +21,7 @@ export default function ListBiens({ rentals }){
                   </a>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{rental.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{rental.titre}</h3>
                   <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
                     <div className="flex items-center space-x-2">
                       <MapPin className="w-5 h-5 text-blue-600" />

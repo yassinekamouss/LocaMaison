@@ -13,11 +13,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class TestController extends AbstractController
 {
 
-    #[Route(path: '/api/all', methods: ['POST'])]
+    #[Route(path: '/test', methods: ['GET'])]
     public function create(Request $request): Response
     {
-        // return new Response($request->getContent());
-        return $this->json(['message' => 'All is right!']);
+        return $this->render('test.html.twig', [
+            'controller_name' => 'TestController',
+        ]);
     }
 
 

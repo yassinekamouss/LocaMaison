@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ImageController extends AbstractController
 {
-    // Afficher les annonces de l'utilisateur authentifié
     #[Route('/image', methods: ['POST'])]
     public function images(Request $request): JsonResponse
     {

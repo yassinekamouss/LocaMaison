@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -20,11 +21,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user.index'])]
+    #[Groups(['user.index', 'conversation.index'])]
     private ?int $id = null;
     
     #[ORM\Column(length: 180)]
-    #[Groups(['user.index'])]
+    #[Groups(['user.index', 'conversation.index'])]
     private ?string $email = null;
     
     /**
@@ -40,11 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['user.index'])]
+    #[Groups(['user.index', 'conversation.index'])]
     private ?string $nom = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['user.index'])]
+    #[Groups(['user.index', 'conversation.index'])]
     private ?string $prenom = null;
     
     
@@ -76,6 +77,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Bien::class, mappedBy: 'proprietaire')]
     private Collection $biens;
+    
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['user.index'])]
+    private ?string $bio = null;
+    
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['user.index'])]
+    private ?string $ville = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.index'])]
+    private ?string $adresse = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.index'])]
+    private ?string $profileImage = null;
 
     public function __construct()
     {
@@ -355,6 +372,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $bien->setProprietaire(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): static
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): static
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): static
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): static
+    {
+        $this->profileImage = $profileImage;
 
         return $this;
     }
