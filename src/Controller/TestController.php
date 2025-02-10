@@ -13,15 +13,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 class TestController extends AbstractController
 {
 
-    #[Route(path: '/test', methods: ['GET'])]
-    public function create(Request $request): Response
-    {
-        return $this->render('test.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
-
-
     #[Route(path: '/bienn/{id}',name:'myroute', methods: ['GET'])]
     public function test(Bien $bien, EntityManagerInterface $em, SerializerInterface $serializer): JsonResponse
     {

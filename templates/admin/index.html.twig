@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 bg-white shadow-lg w-64">
+            <div class="flex items-center justify-center h-16 border-b">
+                <h1 class="text-xl font-bold text-gray-800">ImmoMaroc Admin</h1>
+            </div>
+            <nav class="mt-6">
+                <div class="px-4 py-2 text-gray-500 hover:bg-gray-100 cursor-pointer">
+                    <i class="fas fa-home mr-2"></i>
+                    Dashboard
+                </div>
+                <!-- Autres liens de navigation -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 p-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 text-blue-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-gray-600 text-sm">Total Biens</h2>
+                            <p class="text-2xl font-semibold text-gray-800">2,451</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 text-green-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-gray-600 text-sm">Biens Actifs</h2>
+                            <p class="text-2xl font-semibold text-gray-800">1,873</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-gray-600 text-sm">Utilisateurs</h2>
+                            <p class="text-2xl font-semibold text-gray-800">946</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-gray-600 text-sm">Visites aujourd'hui</h2>
+                            <p class="text-2xl font-semibold text-gray-800">287</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Nouveaux biens par jour</h3>
+                    <canvas id="propertyChart"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Répartition par ville</h3>
+                    <canvas id="cityChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Users -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold text-gray-800">Derniers utilisateurs inscrits</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <img src="/api/placeholder/40/40" class="w-10 h-10 rounded-full" alt="User">
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-900">Ahmed Benali</p>
+                                    <p class="text-sm text-gray-500">il y a 2 heures</p>
+                                </div>
+                            </div>
+                            <!-- More users... -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Properties -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold text-gray-800">Derniers biens ajoutés</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <img src="/api/placeholder/60/40" class="w-16 h-10 rounded object-cover" alt="Property">
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-900">Villa moderne à Casablanca</p>
+                                    <p class="text-sm text-gray-500">Ajouté il y a 1 heure</p>
+                                </div>
+                            </div>
+                            <!-- More properties... -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Chart for new properties per day
+        const propertyCtx = document.getElementById('propertyChart').getContext('2d');
+        new Chart(propertyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Nouveaux biens',
+                    data: [12, 19, 15, 17, 14, 23, 25],
+                    borderColor: 'rgb(59, 130, 246)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Chart for city distribution
+        const cityCtx = document.getElementById('cityChart').getContext('2d');
+        new Chart(cityCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Casablanca', 'Rabat', 'Marrakech', 'Tanger', 'Agadir'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(245, 158, 11)',
+                        'rgb(168, 85, 247)',
+                        'rgb(239, 68, 68)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

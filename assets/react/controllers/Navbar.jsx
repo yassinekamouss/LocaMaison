@@ -14,15 +14,15 @@ export default function Navbar({ isAuthenticated, widthLimitation }) {
 
                 {/* Profil */}
                 <div className="space-x-6 flex items-center relative">
-                    <button
-                        onClick={() => setDropdownOpen(!dropdownOpen)} // Inverser l'état
-                        className="text-gray-600 text-md cursor-pointer"
-                    >
-                        <span className="flex items-center bg-gray-100 rounded-2xl px-2 py-1">
-                            <CircleUserRound className="w-7 h-7 me-1" />
-                            Profil
-                        </span>
-                    </button>
+                <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="text-gray-600 text-md cursor-pointer rounded-full outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    <span className="flex items-center">
+                        <CircleUserRound className="w-10 h-10" />
+                    </span>
+                </button>
+
 
                     {/* Dropdown */}
                     {dropdownOpen && (
@@ -30,13 +30,16 @@ export default function Navbar({ isAuthenticated, widthLimitation }) {
                             className="absolute top-12 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44"
                         >
                             <div className="px-4 py-3 text-sm text-gray-900">
-                                <div>Yassine Kamouss</div>
-                                <div className="font-medium truncate">yassine76@gmail.com</div>
+                                <div>LocaMaison</div>
+                                <div className="font-medium truncate">Louez. Vivez. Profitez.</div>
                             </div>
                             {isAuthenticated && (
                                 <ul className="py-2 text-sm text-gray-700">
                                     <li>
                                         <a href="/annonces" className="block px-4 py-2 hover:bg-gray-100">Mes Annonces</a>
+                                    </li>
+                                    <li>
+                                        <a href="/messages" className="block px-4 py-2 hover:bg-gray-100">Mes Conversations</a>
                                     </li>
                                     <li>
                                         <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</a>

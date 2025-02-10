@@ -16,21 +16,24 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    public function findUserConversations(int $userId)
+    public function findUserConversations($user)
     {
         return $this->createQueryBuilder('m')
-                    ->select('m, MAX(m.createdAt) as HIDDEN lastMessageTime')
-                    ->leftJoin('m.sender', 'u1')
-                    ->leftJoin('m.receiver', 'u2')
-                    ->leftJoin('m.bien', 'b')
-                    ->where('m.sender = :userId OR m.receiver = :userId')
-                    ->groupBy('b.id, u1.id, u2.id, m.id') // Ajoutez toutes les colonnes non agrégées ici
-                    ->orderBy('lastMessageTime', 'DESC')
-                    ->setParameter('userId', $userId)
-                    ->getQuery()
-                    ->getResult();
+            ->select('m, s, r, b')
+            ->leftJoin('m.sender', 's')
+            ->leftJoin('m.receiver', 'r')
+            ->leftJoin('m.bien', 'b')
+            ->where('m.sender = :user OR m.receiver = :user')
+            ->setParameter('user', $user)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
+
+    /**
+     * Trouve tous les messages d'une conversation spécifique
+     */
     //    /**
     //     * @return Message[] Returns an array of Message objects
     //     */

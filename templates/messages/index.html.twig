@@ -2,7 +2,7 @@
     {% block main %}
 
     <div
-        {{ react_component("Test" , {"isAuthenticated": true, "data": conversations }) }}>
+        {{ react_component("ConversationPage" , {"isAuthenticated": true, "data": conversations , userId:1}) }}>
         Loading...
     </div>
     

@@ -9,6 +9,12 @@ export default function AccueilLocations() {
     const [filteredRentals, setFilteredRentals] = useState([]); // Stocke les biens filtrés
     const [loading, setLoading] = useState(true); // Suivi du chargement des biens
     const [showMap, setShowMap] = useState(false); // État pour afficher la carte
+    const [filterCriteria, setFilterCriteria] = useState({ // Critères de filtrage
+        propertyType: [],
+        maxPrice: 10000,
+        roomCount: [],
+        amenities: []
+    });
 
     // Charger les biens au montage du composant
     useEffect(() => {
@@ -23,7 +29,6 @@ export default function AccueilLocations() {
             setRentals(data);
             setFilteredRentals(data);
             setLoading(false);
-            console.log(data);
         })
         .catch((error) => {
             console.error("Erreur:", error);
@@ -31,19 +36,42 @@ export default function AccueilLocations() {
         });
     }, []);
 
-    // Filtrer les biens en fonction de la requête de recherche
+    // Appliquer le filtrage (recherche + filtres)
     useEffect(() => {
-        const filtered = rentals.filter(
-        (rental) =>
-            rental.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            rental.ville.toLowerCase().includes(searchQuery.toLowerCase())
+        let filtered = rentals.filter(
+            (rental) =>
+                rental.titre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                rental.ville?.toLowerCase().includes(searchQuery.toLowerCase())
         );
+    
+        // Appliquer les filtres
+        filtered = filtered.filter((rental) => {
+            const matchesType = filterCriteria.propertyType.length === 0 || 
+                (rental.type || filterCriteria.propertyType.includes(rental.type.toLowerCase()));
+    
+            const matchesPrice = rental.prix !== undefined && rental.prix <= filterCriteria.maxPrice;
+    
+            const matchesRooms = filterCriteria.roomCount.length === 0 || 
+                (rental.chambres !== undefined && filterCriteria.roomCount.includes(rental.chambres));
+    
+            const matchesAmenities = filterCriteria.amenities.length === 0 || 
+                (Array.isArray(rental.equipements) && filterCriteria.amenities.every(amenity => rental.equipements.includes(amenity)));
+    
+            return matchesType && matchesPrice && matchesRooms && matchesAmenities;
+        });
+    
         setFilteredRentals(filtered);
-    }, [searchQuery, rentals]);
+    }, [searchQuery, filterCriteria, rentals]);
 
     // Fonction pour gérer la recherche
     const handleSearch = (query) => {
+        console.log("Recherche:", query);
         setSearchQuery(query);
+    };
+
+     // Fonction pour mettre à jour les filtres
+     const handleFilterChange = (filters) => {
+        setFilterCriteria(filters);
     };
 
     // Fonction pour basculer entre la liste et la carte
@@ -53,7 +81,7 @@ export default function AccueilLocations() {
 
     return (
         <>
-        <SearchSection onSearch={handleSearch} onToggleView={handleToggleView} />
+        <SearchSection onSearch={handleSearch} onFilterChange={handleFilterChange} onToggleView={handleToggleView} />
 
         {/* Affichage du chargement tant que les biens ne sont pas récupérés */}
         {loading ? (

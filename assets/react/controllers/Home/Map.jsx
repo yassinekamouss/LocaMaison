@@ -72,23 +72,25 @@ export default function MapGlobal({ rentals }) {
                                     {/* Localisation */}
                                     <span className="text-gray-600">{rental.ville}</span> <br />
 
-                                    {/* Prix */}
-                                    <span className="text-blue-600 font-bold">
-                                        Prix : {rental.prix} MAD
-                                    </span>
+                                    <div className="flex justify-between items-center">
+                                        {/* Prix */}
+                                        <span className="text-blue-600 font-bold">
+                                            Prix : {rental.prix} MAD
+                                        </span>
 
-                                    {/* Bouton pour fermer le popup */}
-                                    <button
-                                        onClick={() => {
-                                            const marker = document.querySelector(
-                                                `.leaflet-popup-close-button`
-                                            );
-                                            if (marker) marker.click(); // Fermer le popup
-                                        }}
-                                        className="mt-2 text-sm text-gray-600 hover:text-gray-800 underline"
-                                    >
-                                        Fermer
-                                    </button>
+                                        {/* Bouton pour fermer le popup */}
+                                        <button
+                                            onClick={() => {
+                                                const marker = document.querySelector(
+                                                    `.leaflet-popup-close-button`
+                                                );
+                                                if (marker) marker.click(); // Fermer le popup
+                                            }}
+                                            className="mt-2 text-sm text-red-600 hover:text-gray-800 underline"
+                                        >
+                                            Fermer
+                                        </button>
+                                    </div>
                                 </div>
                             </Popup>
                         </Marker>

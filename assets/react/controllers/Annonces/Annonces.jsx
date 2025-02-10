@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, Edit2, Trash2, Eye, Grid, List, Search } from 'lucide-react';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Annonces({ annonces }) {
     const [viewMode, setViewMode] = useState('list');
@@ -12,8 +15,19 @@ export default function Annonces({ annonces }) {
         annonce.ville?.toLowerCase().includes(searchTerm.toLowerCase()) // Optionnel : ajout du filtre sur la ville si existante
     );
 
+    const handleDelete = async (id) => {
+        try {
+            const response = await axios.delete(`/bien/${id}`);
+            console.log('Réponse du serveur :', response.data);
+           // Afficher une notification de succès
+           toast.success("Bien supprimé avec succès !");
+        } catch (error) {
+            console.error('Erreur lors de la suppression :', error.response?.data || error.message);
+        }
+    };
+    
     return (
-        <div className="min-h-screen p-8">
+        <div className="min-h-screen p-8 bg-gray-50">
             {/* Barre de navigation flottante */}
             <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg px-6 py-3 flex items-center gap-4 z-50">
                 <button className="p-2 hover:bg-blue-50 rounded-full transition-colors" onClick={() => setViewMode('grid')}>
@@ -99,7 +113,10 @@ export default function Annonces({ annonces }) {
                                                     <Edit2 className="w-4 h-4" />
                                                     Modifier
                                                 </button>
-                                                <button className="flex items-center justify-center w-12 h-10 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                                                <button 
+                                                    className="flex items-center justify-center w-12 h-10 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                                                    onClick={() => handleDelete(annonce.id)}
+                                                >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -113,6 +130,17 @@ export default function Annonces({ annonces }) {
                     <p className="text-center text-gray-500">Aucune annonce trouvée.</p>
                 )}
             </div>
+            <ToastContainer 
+                position="bottom-right" 
+                autoClose={3000} 
+                hideProgressBar={false} 
+                newestOnTop={false} 
+                closeOnClick 
+                rtl={false} 
+                pauseOnFocusLoss 
+                draggable 
+                pauseOnHover 
+            />
         </div>
     );
 };

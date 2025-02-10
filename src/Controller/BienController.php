@@ -105,7 +105,7 @@ final class BienController extends AbstractController
     }
 
     // Route pour afficher un bien spécifique
-    #[Route('/bien/{id}', name: 'app_bien_show', options:['id' => '\d+'])]
+    #[Route('/bien/{id}', name: 'app_bien_show', options:['id' => '\d+'], methods: ['GET'])]
     public function show(Bien $bien, SerializerInterface $serializer): Response
     {
         // Sérialiser le bien avec ses images
@@ -121,7 +121,7 @@ final class BienController extends AbstractController
     }
 
     // Route pour modifier un bien
-    #[Route('/propertie/{id}/edit', name: 'app_propertie_edit')]
+    #[Route('/bien/{id}/edit', name: 'app_propertie_edit')]
     public function edit(int $id): Response
     {
         // Récuperation du bien
@@ -135,5 +135,14 @@ final class BienController extends AbstractController
         // Retourner un json contenant le bien
         return $this->json($rental);
     }
+
+    #[Route('/bien/{bien}', name: 'app_bien_delete', methods: ['DELETE'])]
+    public function delete(Bien $bien, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Supprimer le bien
+        $entityManager->remove($bien);
+        $entityManager->flush();
     
+        return $this->json(['message' => 'Bien supprimé avec succès'], Response::HTTP_OK);
+    }
 }
