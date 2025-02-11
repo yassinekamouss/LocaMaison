@@ -8,7 +8,7 @@
 {% block main %}
 
     <div
-        {{ react_component("Admin/Dashboard", {'data' : data|json_encode|raw}, {permanent:true}) }}>
+        {{ react_component("Admin/Users", {'data' : data|json_encode|raw}, {permanent:true}) }}>
         Loading...
     </div>
     

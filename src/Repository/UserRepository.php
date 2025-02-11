@@ -58,6 +58,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult();
     }
 
+    public function findAllUsersWithPropertyCount(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.id, u.nom, u.prenom, u.email, u.roles, u.isVerified as status, u.profileImage, COUNT(p.id) AS property_count')
+            ->leftJoin('u.biens', 'p') // Assurez-vous que la relation User -> Property est bien définie
+            ->groupBy('u.id')
+            ->getQuery()
+            ->getResult();
+    }
     //    public function findOneBySomeField($value): ?User
     //    {
     //        return $this->createQueryBuilder('u')

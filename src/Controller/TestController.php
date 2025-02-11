@@ -13,11 +13,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class TestController extends AbstractController
 {
 
-    #[Route(path: '/bienn/{id}',name:'myroute', methods: ['GET'])]
-    public function test(Bien $bien, EntityManagerInterface $em, SerializerInterface $serializer): JsonResponse
-    {
-        // Récupérer le bien avec l'id {id} et ses images associées et equipements et retourner une réponse JSON
-        $jsonBien = $serializer->serialize($bien, 'json', ['groups' => 'bien.index']);
-        return JsonResponse::fromJsonString($jsonBien);
+    #[Route(path: '/test',name:'test_route', methods: ['GET'])]
+    public function index(Request $request){
+        return $this->render('test.html.twig');
     }
 }
