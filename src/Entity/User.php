@@ -21,11 +21,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user.index', 'conversation.index'])]
+    #[Groups(['user.index', 'conversation.index', 'admin.biens'])]
     private ?int $id = null;
     
     #[ORM\Column(length: 180)]
-    #[Groups(['user.index', 'conversation.index'])]
+    #[Groups(['user.index', 'conversation.index', 'admin.biens'])]
     private ?string $email = null;
     
     /**
@@ -41,11 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['user.index', 'conversation.index'])]
+    #[Groups(['user.index', 'conversation.index','admin.biens'])]
     private ?string $nom = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['user.index', 'conversation.index'])]
+    #[Groups(['user.index', 'conversation.index', 'admin.biens'])]
     private ?string $prenom = null;
     
     
@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $receivedMessages;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['user.index'])]
+    #[Groups(['user.index', 'admin.biens'])]
     private ?string $phone = null;
     
     #[ORM\Column(name: "created_at", type: "datetime", nullable: true)]

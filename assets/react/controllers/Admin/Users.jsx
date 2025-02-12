@@ -4,18 +4,16 @@ import Sidebar from './SideBar';
 export default function Users({ data }) {
   const users = JSON.parse(data);
 
-  console.log(users);
-
   const [selectedTab, setSelectedTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedUsers, setPaginatedUsers] = useState([]);
-  const usersPerPage = 5;
+  const usersPerPage = 8;
 
   useEffect(() => {
     let filteredUsers = users.filter((user) => {
       if (selectedTab === 'all') return true;
-      return user.role.toLowerCase() === selectedTab.toLowerCase();
+      return user.roles[0].toLowerCase() === selectedTab.toLowerCase();
     });
 
     filteredUsers = filteredUsers.filter((user) =>
@@ -48,14 +46,14 @@ export default function Users({ data }) {
                 {/* Role Filter Buttons */}
                 <div className="flex space-x-4">
                     <button
-                    onClick={() => setSelectedTab('all')}
-                    className={`px-4 py-2 rounded-lg text-sm ${selectedTab === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                      onClick={() => setSelectedTab('all')}
+                      className={`px-4 py-2 rounded-lg text-sm ${selectedTab === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
                     >
                     Tous
                     </button>
                     <button
-                    onClick={() => setSelectedTab('admin')}
-                    className={`px-4 py-2 rounded-lg text-sm ${selectedTab === 'admin' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                      onClick={() => setSelectedTab('ROLE_ADMIN')}
+                      className={`px-4 py-2 rounded-lg text-sm ${selectedTab === 'ROLE_ADMIN' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
                     >
                     Admin
                     </button>
@@ -119,7 +117,6 @@ export default function Users({ data }) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="relative">
                                 <button className="text-blue-600 hover:text-blue-800">
-                                    <i className="fas fa-info-circle"></i>
                                     {user.property_count || 0}
                                 </button>
                                 </div>

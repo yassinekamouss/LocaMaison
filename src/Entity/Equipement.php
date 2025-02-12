@@ -15,11 +15,11 @@ class Equipement
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['equipement.index', 'bien.show'])]
+    #[Groups(['equipement.index', 'bien.show', 'admin.biens'])]
     private ?int $id = null;
     
     #[ORM\Column(length: 255)]
-    #[Groups(['equipement.index', 'bien.show'])]
+    #[Groups(['equipement.index', 'bien.show', 'admin.biens'])]
     private ?string $nom = null;
 
     /**

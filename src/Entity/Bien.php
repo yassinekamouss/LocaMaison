@@ -15,43 +15,43 @@ class Bien
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['bien.index', 'bien.crate'])]
+    #[Groups(['bien.index', 'bien.crate', 'admin.biens'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
     private ?float $prix = null;
     
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.indx', 'bien.show','bien.crate', 'conversation.index'])]
+    #[Groups(['bien.indx', 'bien.show','bien.crate', 'conversation.index', 'admin.biens'])]
     private ?string $adresse = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index','bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index','bien.crate', 'conversation.index', 'admin.biens'])]
     private ?string $ville = null;
     
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.show','bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index', 'bien.show','bien.crate', 'conversation.index', 'admin.biens'])]
     private ?float $surface = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
     private ?float $chambres = null;
     
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['bien.index' , 'bien.crate'])]
+    #[Groups(['bien.index' , 'bien.crate', 'admin.biens'])]
     private ?string $status = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index' , 'bien.crate', 'conversation.index'])]
+    #[Groups(['bien.index' , 'bien.crate', 'conversation.index', 'admin.biens'])]
     private ?string $type = null;
 
     #[ORM\Column]
@@ -63,7 +63,7 @@ class Bien
     private ?float $latitude = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'admin.biens'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -73,14 +73,14 @@ class Bien
      * @var Collection<int, Image>
      */
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'bien_id')]
-    #[Groups(['bien.index'])]
+    #[Groups(['bien.index', 'admin.biens'])]
     private Collection $images;
     
     /**
      * @var Collection<int, Equipement>
      */
     #[ORM\ManyToMany(targetEntity: Equipement::class, mappedBy: 'bien')]
-    #[Groups(['bien.show' ,'bien.crate'])]
+    #[Groups(['bien.show' ,'bien.crate', 'admin.biens'])]
     private Collection $equipements;
 
     /**
@@ -96,7 +96,7 @@ class Bien
     private Collection $favoris;
 
     #[ORM\ManyToOne(inversedBy: 'biens')]
-    // #[Groups(['bien.crate'])]
+    #[Groups(['admin.biens'])]
     private ?User $proprietaire = null;
 
     public function __construct()

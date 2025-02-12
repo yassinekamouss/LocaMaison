@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class AdminController extends AbstractController
@@ -97,11 +98,22 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/admin/users', name: 'admin_dashboard_users')]
-    public function visits(UserRepository $userRepository): Response
+    public function users(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAllUsersWithPropertyCount();
         return $this->render('admin/users.html.twig',[
             'data' => $users
+        ]);
+    }
+    
+    #[Route('/admin/biens', name: 'admin_dashboard_biens')]
+    public function biens(Request $request, BienRepository $bienRepository, SerializerInterface $serializer): Response
+    {
+        $biens = $bienRepository->findAll();
+        $data = $serializer->serialize($biens, 'json', ['groups' => 'admin.biens']);
+        // return $this->json($biens, 200, [], ['groups' => 'admin.biens']);
+        return $this->render('admin/biens.html.twig',[
+            'data' => $data
         ]);
     }
 }

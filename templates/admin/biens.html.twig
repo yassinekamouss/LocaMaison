@@ -2,13 +2,13 @@
 
 
 {% block title %}
-    Admin gestion des utilisateurs
+    Admin gestion des biens
 {% endblock %}
 
 {% block main %}
 
     <div
-        {{ react_component("Admin/Users", {'data' : data|json_encode|raw}, {permanent:true}) }}>
+        {{ react_component("Admin/Biens", {'data': data},{permanent:true}) }}>
         Loading...
     </div>
     

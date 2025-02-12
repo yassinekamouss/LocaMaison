@@ -11,7 +11,7 @@ export default function Sidebar() {
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
     { name: "Utilisateurs", path: "/admin/users", icon: <Users size={20} /> },
-    { name: "Biens", path: "/properties", icon: <Building size={20} /> },
+    { name: "Biens", path: "/admin/biens", icon: <Building size={20} /> },
     { name: "Commandes", path: "/orders", icon: <ShoppingCart size={20} /> },
   ];
 
@@ -49,7 +49,6 @@ export default function Sidebar() {
         <button
           className="w-full flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 text-white py-2 rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg"
           onClick={() => {
-            console.log("Logout");
             window.location.href = "/logout";
           }}
         >
