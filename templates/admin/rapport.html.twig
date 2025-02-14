@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Admin rapports
+{% endblock %}
+
+{% block main %}
+
+    <div
+        {{ react_component("Admin/Rapport", {permanent:true}) }}>
+        Loading...
+    </div>
+    
+{% endblock %}

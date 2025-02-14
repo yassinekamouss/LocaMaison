@@ -1,4 +1,4 @@
-import { CircleUserRound, LogOut, ExternalLink, LockOpen } from 'lucide-react';
+import { CircleUserRound, LogOut, ExternalLink, LockOpen, Wrench } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navbar({ isAuthenticated, widthLimitation }) {
@@ -44,6 +44,9 @@ export default function Navbar({ isAuthenticated, widthLimitation }) {
                                     <li>
                                         <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
                                     </li>
+                                    <li>
+                                        <a href="/contact" className="block px-4 py-2 hover:bg-gray-100">Contact</a>
+                                    </li>
                                 </ul>
                             )}
                             <div className="py-2">
@@ -66,6 +69,12 @@ export default function Navbar({ isAuthenticated, widthLimitation }) {
                                             <span className="flex items-center">
                                                 <LockOpen className="w-5 h-5 me-1" />
                                                 S'inscrire
+                                            </span>
+                                        </a>
+                                        <a href="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <span className="flex items-center">
+                                                <Wrench className="w-5 h-5 me-1" />
+                                                Contact
                                             </span>
                                         </a>
                                     </>

@@ -119,25 +119,22 @@ export default function Biens({data}) {
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
             <div className="ms-64 flex-1 p-8">
-                {/* Header */}
-                <div className="mb-8 bg-gradient-to-b from-white to-gray-50 rounded-lg p-4 shadow-md">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Gestion Des Biens</h1>
-                    <p className="text-gray-600">Gérez Les Biens et suivez leurs statut en temps réel</p>
-                </div>
-                {/* Filters */}
-                <div className="p-4 mb-8">
-                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-                        <div className="relative w-full md:w-96">
-                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Rechercher un bien..."
-                                className="shadow-sm w-full pl-12 pr-4 py-3 outline-none bg-white border border-gray-200 rounded-xl focus:border-none focus:ring-2 focus:ring-black"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex items-center gap-4">
+                <h1 className="text-2xl font-bold text-gray-800 mb-6">Gestion des biens</h1>
+
+                {/* Search & Filter */}
+                <div className="mb-8 flex flex-wrap gap-4 items-center bg-white p-4 rounded-lg shadow">
+                    <div className="flex-1 min-w-[300px] relative">
+                        <input
+                        type="text"
+                        placeholder="Rechercher par nom, email ou sujet..."
+                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                    </div>
+
+                    <div className="flex gap-4">
                             <select
                                 className="bg-gray-100 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500"
                                 value={filterStatus}
@@ -154,8 +151,8 @@ export default function Biens({data}) {
                             >
                                 <TrendingUp className="w-5 h-5 text-gray-600" />
                             </button>
-                        </div>
                     </div>
+
                 </div>
 
                 {/* Properties Grid */}

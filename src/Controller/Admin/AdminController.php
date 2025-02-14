@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Repository\BienRepository;
+use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,9 +112,27 @@ final class AdminController extends AbstractController
     {
         $biens = $bienRepository->findAll();
         $data = $serializer->serialize($biens, 'json', ['groups' => 'admin.biens']);
-        // return $this->json($biens, 200, [], ['groups' => 'admin.biens']);
         return $this->render('admin/biens.html.twig',[
             'data' => $data
         ]);
     }
+
+    #[Route('/admin/support', name: 'admin_dashboard_support')]
+    public function support(Request $request, ContactRepository $contactRepository, SerializerInterface $serializer): Response
+    {
+        
+        $contacts = $contactRepository->findAll();
+        $data = $serializer->serialize($contacts, 'json');
+        
+        return $this->render('admin/support.html.twig',[
+            'data' => $data
+        ]);
+    }
+    
+    #[Route('/admin/rapport', name: 'admin_dashboard_rapport')]
+    public function rapport(): Response
+    {
+        return $this->render('admin/rapport.html.twig');
+    }
+
 }

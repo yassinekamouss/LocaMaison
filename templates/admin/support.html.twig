@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Gestion Des Messages Et Réclamations
+{% endblock %}
+
+{% block main %}
+
+    <div
+        {{ react_component("Admin/Support",{'data': data}, {permanent:true}) }}>
+        Loading...
+    </div>
+    
+{% endblock %}

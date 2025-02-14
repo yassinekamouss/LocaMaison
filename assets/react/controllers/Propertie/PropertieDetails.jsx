@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import {
     Heart,
     MapPin,
@@ -21,6 +22,11 @@ import {
     SquareParking,
     ServerCog,
     Dog,
+    Facebook,
+    Mail,
+    Copy,
+    Twitter,
+    Linkedin
 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import L, { polygon } from 'leaflet';
@@ -28,6 +34,7 @@ import 'leaflet/dist/leaflet.css';
 
 export default function PropertyDetails({propertie}) {
     const [activeImage, setActiveImage] = useState(0);
+    const [showShareOptions, setShowShareOptions] = useState(false);
 
     const bien = JSON.parse(propertie);
     const equipements = {
@@ -54,18 +61,75 @@ export default function PropertyDetails({propertie}) {
         popupAnchor: [0, -40],
     });
 
+    
+
+    // URL du bien à partager
+    const propertyUrl = `${window.location.origin}/property/${bien.id}`;
+
+    // Copier le lien dans le presse-papiers
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(propertyUrl);
+        setShowShareOptions(false); // Fermer le menu après l'action
+    };
+
+    // Partager sur les réseaux sociaux
+    const shareOnSocialMedia = (platform) => {
+        let url = '';
+        switch (platform) {
+        case 'facebook':
+            url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(propertyUrl)}`;
+            break;
+        case 'twitter':
+            url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(propertyUrl)}&text=${encodeURIComponent(`Découvrez ce bien : ${bien.titre}`)}`;
+            break;
+        case 'linkedin':
+            url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(propertyUrl)}`;
+            break;
+        default:
+            break;
+        }
+        window.open(url, '_blank');
+        setShowShareOptions(false); // Fermer le menu après l'action
+    };
+
+    // Partager par email
+    const shareByEmail = () => {
+        const subject = encodeURIComponent(`Découvrez ce bien : ${bien.titre}`);
+        const body = encodeURIComponent(`Bonjour, je vous invite à découvrir ce bien : ${propertyUrl}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        setShowShareOptions(false); // Fermer le menu après l'action
+    };
+
+    // Sauvegarder le bien
+    const handleSauvgarder = async (id) => {
+        // envoi de la requête pour sauvegarder le bien via l'API avec axios
+        const response = await axios.post(`/favori/${id}`, { id });
+        if (response.status === 200) {
+            alert('Le bien a été sauvegardé avec succès');
+        }
+
+        // en cas d'erreur
+        if (response.status === 400) {
+            console.log('Une erreur est survenue lors de la sauvegarde du bien');
+        }
+    };
+
   return (
     <>
-        <div className="max-w-7xl mx-auto px-4 py-8 ">
+        <div className="max-w-7xl mx-auto px-4 py-8 relative">
             {/* En-tête avec actions */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">{bien.titre}</h1>
                 <div className="flex gap-4">
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <button 
+                    onClick={() => {handleSauvgarder(bien.id)}}
+                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     <Heart className="h-5 w-5" />
                     Sauvegarder
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <button 
+                    onClick={() => setShowShareOptions(!showShareOptions)}
+                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     <Share2 className="h-5 w-5" />
                     Partager
                 </button>
@@ -253,6 +317,50 @@ export default function PropertyDetails({propertie}) {
                     </MapContainer>
                 </div>
             </div>
+
+
+            {/* Menu déroulant des options de partage */}
+            {showShareOptions && (
+                <div className="absolute right-0 top-[80px] mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                    <div className="p-2">
+                        <button
+                            onClick={handleCopyLink}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                            <Copy className="h-5 w-5" />
+                            Copier le lien
+                        </button>
+                        <button
+                            onClick={shareByEmail}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                            <Mail className="h-5 w-5" />
+                            Envoyer par email
+                        </button>
+                        <button
+                            onClick={() => shareOnSocialMedia('facebook')}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                            <Facebook className="h-5 w-5 text-blue-600" />
+                            Partager sur Facebook
+                        </button>
+                        <button
+                            onClick={() => shareOnSocialMedia('twitter')}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                            <Twitter className="h-5 w-5 text-blue-400" />
+                            Partager sur Twitter
+                        </button>
+                        <button
+                            onClick={() => shareOnSocialMedia('linkedin')}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                            >
+                            <Linkedin className="h-5 w-5 text-blue-700" />
+                            Partager sur LinkedIn
+                        </button>
+                    </div>
+                </div>
+            )}
 
         </div>
     </>

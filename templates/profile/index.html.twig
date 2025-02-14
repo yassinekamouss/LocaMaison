@@ -10,11 +10,13 @@
         {{ react_component('Navbar', {"isAuthenticated": is_granted('IS_AUTHENTICATED'), "widthLimitation":true} , {permanent: true}) }}>
         Loading ....
     </div>
+
+    {# contenue de la formulaire de profile #}
     <div class="min-h-screen bg-gray-50 py-8">
         <div class="max-w-4xl mx-auto px-4">
             <div class="bg-white rounded-lg shadow-sm mb-6">
                 <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
+                    <div class="flex justify-between items-center mb-6">
                         <h1 class="text-2xl font-semibold text-gray-900">Mon Profil</h1>
                         <button id="edit-btn"
                             class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -101,44 +103,42 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const editBtn = document.getElementById('edit-btn');
-            const submitButton = document.getElementById('submit-button');
-            const form = document.querySelector('form');
-            const inputs = form.querySelectorAll('input, textarea, select');
-            const profileImageInput = document.getElementById('profile_profileImage');
-            const profileImagePreview = document.getElementById('profile-image-preview');
+        const editBtn = document.getElementById('edit-btn');
+        const submitButton = document.getElementById('submit-button');
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('input, textarea, select');
+        const profileImageInput = document.getElementById('profile_profileImage');
+        const profileImagePreview = document.getElementById('profile-image-preview');
 
-            //  Activer les champs
-            editBtn.addEventListener('click', function () {
+        //  Activer les champs
+        editBtn.addEventListener('click', function () {
 
-                // Activer les champs
-                inputs.forEach(input => {
-                    input.disabled = false;
-                });
-
-                // Afficher le bouton de sauvegarde
-                submitButton.classList.remove('hidden');
-
-                // Cacher le bouton de modification
-                editBtn.classList.add('hidden');
-
+            // Activer les champs
+            inputs.forEach(input => {
+                input.disabled = false;
             });
 
-            // Afficher l'image de profil
-            profileImageInput.addEventListener('change', function (event) {
-                const file = event.target.files[0]; // Récupérer le fichier sélectionné
+            // Afficher le bouton de sauvegarde
+            submitButton.classList.remove('hidden');
 
-                if (file) {
-                    const reader = new FileReader(); 
+            // Cacher le bouton de modification
+            editBtn.classList.add('hidden');
 
-                    reader.onload = function (e) {
-                        profileImagePreview.src = e.target.result;
-                    };
+        });
 
-                    reader.readAsDataURL(file);
-                }
-            });
+        // Afficher l'image de profil
+        profileImageInput.addEventListener('change', function (event) {
+            const file = event.target.files[0]; // Récupérer le fichier sélectionné
+
+            if (file) {
+                const reader = new FileReader(); 
+
+                reader.onload = function (e) {
+                    profileImagePreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 {% endblock %}

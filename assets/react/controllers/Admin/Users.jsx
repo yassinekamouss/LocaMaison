@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './SideBar';
+import { Search } from 'lucide-react';
 
 export default function Users({ data }) {
   const users = JSON.parse(data);
@@ -42,7 +43,20 @@ export default function Users({ data }) {
 
         <div className="ms-64 mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
             {/* Navbar */}
-            <div className="bg-white shadow mb-4 rounded-lg p-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-6">Comptes des utilisateurs</h1>
+            
+            <div className="flex flex-wrap gap-4 mb-8 items-center bg-white p-4 rounded-lg shadow">
+                <div className="flex-1 min-w-[300px] relative">
+                    <input
+                    type="text"
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Rechercher par nom ou email"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+
                 {/* Role Filter Buttons */}
                 <div className="flex space-x-4">
                     <button
@@ -58,19 +72,10 @@ export default function Users({ data }) {
                     Admin
                     </button>
                 </div>
-
-                {/* Search Input */}
-                <input
-                    type="text"
-                    className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Rechercher par nom ou email"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
             </div>
 
             {/* Users Table */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                     <tr>
@@ -149,16 +154,16 @@ export default function Users({ data }) {
                 </table>
             </div>
 
-        {/* Pagination */}
-        <div className="flex justify-center items-center space-x-2 py-4 px-6 bg-gray-50">
-          <button onClick={prevPage} disabled={currentPage === 1} className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50">
-            Précédent
-          </button>
-          <span className="text-sm text-gray-600">{`Page ${currentPage} sur ${totalPages}`}</span>
-          <button onClick={nextPage} disabled={currentPage === totalPages} className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50">
-            Suivant
-          </button>
-        </div>
+            {/* Pagination */}
+            <div className="flex justify-center items-center space-x-2 py-4 px-6 bg-gray-50">
+              <button onClick={prevPage} disabled={currentPage === 1} className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50">
+                Précédent
+              </button>
+              <span className="text-sm text-gray-600">{`Page ${currentPage} sur ${totalPages}`}</span>
+              <button onClick={nextPage} disabled={currentPage === totalPages} className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50">
+                Suivant
+              </button>
+            </div>
       </div>
     </div>
   );
