@@ -4,7 +4,7 @@ export default function ListBiens({ rentals }){
 
     return (
       <>
-        <div className="container mx-auto  mt-8 grid grid-cols-1 md:grid-cols-4 gap-6 -z-30">
+        <div className="container mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 -z-30">
           {rentals.length > 0 ? (
             rentals.map((rental) => (
               <div

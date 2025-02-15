@@ -42,6 +42,9 @@ export default function Navbar({ isAuthenticated, widthLimitation }) {
                                         <a href="/messages" className="block px-4 py-2 hover:bg-gray-100">Mes Conversations</a>
                                     </li>
                                     <li>
+                                        <a href="/favoris" className="block px-4 py-2 hover:bg-gray-100">Mes Sauvgardes</a>
+                                    </li>
+                                    <li>
                                         <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
                                     </li>
                                     <li>

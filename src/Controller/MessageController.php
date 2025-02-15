@@ -13,10 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class MessageController extends AbstractController
 {
     #[Route('/messages', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function images(Request $request, MessageRepository $messageRepository, SerializerInterface $serializer): Response
     {
         $user = $this->getUser();
@@ -76,6 +78,7 @@ final class MessageController extends AbstractController
     }
 
     #[Route('/message', name: 'send_message', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function sendMessage(
         Request $request, 
         EntityManagerInterface $entityManager, 
@@ -83,21 +86,33 @@ final class MessageController extends AbstractController
         BienRepository $bienRepository
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-
-        // Vérification des données
-        if (!isset($data['sender_id'], $data['receiver_id'], $data['bien_id'], $data['contenu'])) {
+    
+        // Vérification des données requises
+        if (!isset($data['sender_id'], $data['bien_id'], $data['contenu'])) {
             return new JsonResponse(['error' => 'Données invalides'], 400);
         }
-
-        // Récupérer les entités
-        $sender = $userRepository->find($data['sender_id']);
-        $receiver = $userRepository->find($data['receiver_id']);
+    
+        // Récupération des entités
+        $sender = $this->getUser();
         $bien = $bienRepository->find($data['bien_id']);
-
-        if (!$sender || !$receiver || !$bien) {
-            return new JsonResponse(['error' => 'Entité non trouvée'], 404);
+    
+        if (!$sender || !$bien) {
+            return new JsonResponse(['error' => 'Expéditeur ou bien non trouvé'], 404);
         }
-
+    
+        // Récupération du receiver (destinataire)
+        if (!isset($data['receiver_id']) || empty($data['receiver_id'])) {
+            // Si receiver_id n'est pas précisé, on récupère le propriétaire du bien
+            $receiver = $bien->getProprietaire(); 
+        } else {
+            // Si receiver_id est fourni, on récupère directement l'utilisateur correspondant
+            $receiver = $userRepository->find($data['receiver_id']);
+        }
+    
+        if (!$receiver) {
+            return new JsonResponse(['error' => 'Destinataire non trouvé'], 404);
+        }
+    
         // Création du message
         $message = new Message();
         $message->setSender($sender);
@@ -105,15 +120,16 @@ final class MessageController extends AbstractController
         $message->setBien($bien);
         $message->setContenu($data['contenu']);
         $message->setCreatedAt(new \DateTime());
-
+    
         // Sauvegarde en base de données
         $entityManager->persist($message);
         $entityManager->flush();
-
+    
         return new JsonResponse([
             'id' => $message->getId(),
             'contenu' => $message->getContenu(),
             'created_at' => $message->getCreatedAt()->format('Y-m-d H:i:s')
         ], 201);
     }
+    
 }

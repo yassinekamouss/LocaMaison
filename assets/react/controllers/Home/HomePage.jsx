@@ -9,7 +9,8 @@ export default function Home({ isAuthenticated }) {
       <Navbar isAuthenticated={isAuthenticated} widthLimitation={false} />
 
       {/* Indication pour motivier les visiteurs de créer un compte */}
-      {!isAuthenticated && (
+      {/* {!isAuthenticated && ( */}
+      {(
         <section className="relative bg-gradient-to-r from-blue-400 to-indigo-500 text-white py-20">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div className="container mx-auto px-6 text-center relative">

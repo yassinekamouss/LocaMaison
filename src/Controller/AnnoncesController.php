@@ -34,6 +34,7 @@ final class AnnoncesController extends AbstractController
     }
 
     #[Route('/annonce/create', name: 'app_bien_create_form', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function create_form(): Response
     {
         return $this->render('propertie/create.html.twig');

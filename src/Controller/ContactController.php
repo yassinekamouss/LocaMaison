@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ContactController extends AbstractController
 {
@@ -45,6 +46,7 @@ final class ContactController extends AbstractController
     }
 
     #[Route('/contacts/{contact}/mark-read', name: 'contact_modify', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function modify(Contact $contact, Request $request, EntityManagerInterface $em): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -62,6 +64,7 @@ final class ContactController extends AbstractController
     }
 
     #[Route('/contacts/{contact}/reply', name: 'contact_reply', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function replyToMessage(
         Request $request, 
         Contact $contact, 

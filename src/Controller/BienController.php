@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -38,6 +39,7 @@ final class BienController extends AbstractController
         return new JsonResponse($jsonBiens, Response::HTTP_OK, [], true);  
     }
 
+    // Route pour créer un bien
     #[Route('/bien', name: 'app_propertie_create', methods: ['POST'])]
     public function createBien(Request $request): JsonResponse
     {
@@ -122,6 +124,7 @@ final class BienController extends AbstractController
 
     // Route pour modifier un bien
     #[Route('/bien/{id}/edit', name: 'app_propertie_edit')]
+    #[IsGranted('ROLE_USER')]
     public function edit(int $id): Response
     {
         // Récuperation du bien
@@ -136,7 +139,9 @@ final class BienController extends AbstractController
         return $this->json($rental);
     }
 
+    // Route pour supprimer un bien
     #[Route('/bien/{bien}', name: 'app_bien_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_USER')]
     public function delete(Bien $bien, EntityManagerInterface $entityManager): JsonResponse
     {
         // Supprimer le bien

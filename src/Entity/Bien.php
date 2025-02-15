@@ -15,35 +15,35 @@ class Bien
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['bien.index', 'bien.crate', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.crate', 'admin.biens', 'favoris.index'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?float $prix = null;
     
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.indx', 'bien.show','bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.indx', 'bien.show','bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?string $adresse = null;
     
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index','bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index','bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?string $ville = null;
     
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.show','bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.show','bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?float $surface = null;
 
     #[ORM\Column]
-    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?float $chambres = null;
     
     #[ORM\Column(length: 50, nullable: true)]
@@ -51,7 +51,7 @@ class Bien
     private ?string $status = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['bien.index' , 'bien.crate', 'conversation.index', 'admin.biens'])]
+    #[Groups(['bien.index' , 'bien.crate', 'conversation.index', 'admin.biens', 'favoris.index'])]
     private ?string $type = null;
 
     #[ORM\Column]
@@ -73,7 +73,7 @@ class Bien
      * @var Collection<int, Image>
      */
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'bien_id')]
-    #[Groups(['bien.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'admin.biens', 'favoris.index'])]
     private Collection $images;
     
     /**

@@ -12,11 +12,11 @@ class Image
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bien.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'admin.biens', 'favoris.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bien.index', 'admin.biens'])]
+    #[Groups(['bien.index', 'admin.biens', 'favoris.index'])]
     private ?string $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]

@@ -16,7 +16,7 @@ import {
 export default function RentalFilter({ onClose, onFilterApply }) {
     const [filters, setFilters] = useState({
         propertyType: [],
-        maxPrice: 10000,
+        maxPrice: 100000,
         roomCount: [],
         amenities: []
     });
@@ -27,8 +27,8 @@ export default function RentalFilter({ onClose, onFilterApply }) {
     };
 
     const propertyTypes = [
-        { value: 'apartment', label: 'Appartement', icon: Building },
-        { value: 'house', label: 'Maison', icon: Home },
+        { value: 'appartement', label: 'Appartement', icon: Building },
+        { value: 'maison', label: 'Maison', icon: Home },
         { value: 'villa', label: 'Villa', icon: Tent },
         { value: 'studio', label: 'Studio', icon: BedDouble }
     ];
@@ -98,7 +98,7 @@ export default function RentalFilter({ onClose, onFilterApply }) {
                     <input 
                         type="range" 
                         min={0} 
-                        max="10000" 
+                        max="100000" 
                         step="100"
                         value={filters.maxPrice}
                         onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}

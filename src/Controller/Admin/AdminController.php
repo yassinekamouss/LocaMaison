@@ -10,11 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class AdminController extends AbstractController
 {
 
     #[Route('/admin/dashboard', name: 'admin_dashboard')]
+    #[IsGranted('ROLE_ADMIN')]
+    
     public  function index(BienRepository $bienRepository, UserRepository $userRepository): Response
     {
         // Récupérer le nombre de bien enregistré (dans la table bien)
@@ -99,6 +102,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/admin/users', name: 'admin_dashboard_users')]
+    #[isGranted('ROLE_ADMIN')]
     public function users(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAllUsersWithPropertyCount();
@@ -108,6 +112,7 @@ final class AdminController extends AbstractController
     }
     
     #[Route('/admin/biens', name: 'admin_dashboard_biens')]
+    #[isGranted('ROLE_ADMIN')]
     public function biens(Request $request, BienRepository $bienRepository, SerializerInterface $serializer): Response
     {
         $biens = $bienRepository->findAll();
@@ -118,6 +123,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/admin/support', name: 'admin_dashboard_support')]
+    #[isGranted('ROLE_ADMIN')]
     public function support(Request $request, ContactRepository $contactRepository, SerializerInterface $serializer): Response
     {
         
@@ -130,6 +136,7 @@ final class AdminController extends AbstractController
     }
     
     #[Route('/admin/rapport', name: 'admin_dashboard_rapport')]
+    #[isGranted('ROLE_ADMIN')]
     public function rapport(): Response
     {
         return $this->render('admin/rapport.html.twig');

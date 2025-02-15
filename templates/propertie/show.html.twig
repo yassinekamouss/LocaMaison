@@ -9,6 +9,13 @@
         {{ react_component('Propertie/PropertiePage', 
             {
                 "isAuthenticated": is_granted('IS_AUTHENTICATED'),
+                 "user": is_granted('IS_AUTHENTICATED') ? {
+                    "id": app.user.id,
+                    "email": app.user.email,
+                    "nom": app.user.nom,
+                    "prenom": app.user.prenom,
+                    "phone": app.user.phone,
+                } : null,
                 "propertie": bien|json_encode|raw,
             },
             {permanent: true}) }}>

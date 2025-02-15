@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
     Heart,
@@ -31,11 +31,18 @@ import {
 import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import L, { polygon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { motion } from "framer-motion";
 
-export default function PropertyDetails({propertie}) {
+export default function PropertyDetails({propertie, user}) {
     const [activeImage, setActiveImage] = useState(0);
     const [showShareOptions, setShowShareOptions] = useState(false);
+    const [isFavorited, setIsFavorited] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
+console.log(user);
     const bien = JSON.parse(propertie);
     const equipements = {
         "Climatisation et Chauffage": AirVent,
@@ -53,6 +60,13 @@ export default function PropertyDetails({propertie}) {
         "Animaux_acceptés": Dog
     };
 
+    // Vérifier si l'élément est déjà favori au chargement
+    useEffect(() => {
+        fetch(`/favori/check/${bien.id}`)
+            .then((res) => res.json())
+            .then((data) => setIsFavorited(data.isFavorited));
+    }, []);
+
     // Définition de l'icône personnalisée
     const customIcon = L.icon({
         iconUrl: '/images/house-location.png',
@@ -61,7 +75,38 @@ export default function PropertyDetails({propertie}) {
         popupAnchor: [0, -40],
     });
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setIsSubmitting(true);
+        setError(null);
     
+        try {
+            const response = await fetch('/message', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                sender_id: user.id,
+                bien_id: bien.id,
+                contenu: message
+                }),
+          });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Une erreur est survenue');
+            }
+        
+            setSuccess(true);
+            setMessage('');
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+      };
 
     // URL du bien à partager
     const propertyUrl = `${window.location.origin}/property/${bien.id}`;
@@ -105,7 +150,7 @@ export default function PropertyDetails({propertie}) {
         // envoi de la requête pour sauvegarder le bien via l'API avec axios
         const response = await axios.post(`/favori/${id}`, { id });
         if (response.status === 200) {
-            alert('Le bien a été sauvegardé avec succès');
+            setIsFavorited(!isFavorited);
         }
 
         // en cas d'erreur
@@ -124,7 +169,16 @@ export default function PropertyDetails({propertie}) {
                 <button 
                     onClick={() => {handleSauvgarder(bien.id)}}
                     className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <Heart className="h-5 w-5" />
+                     <motion.div
+                        animate={{ scale: isFavorited ? 1.2 : 1, opacity: isFavorited ? 1 : 0.6 }}
+                        transition={{ duration: 0.3, ease: "easeIn" }}
+                    >
+                        <Heart 
+                            color={isFavorited ? "red" : "gray"} 
+                            fill={isFavorited ? "red" : "none"} 
+                            className="h-5 w-5"
+                        />
+                    </motion.div>
                     Sauvegarder
                 </button>
                 <button 
@@ -169,7 +223,7 @@ export default function PropertyDetails({propertie}) {
                     </div>
                     <div className="relative">
                         <img 
-                        src={`/uploads/${bien.images[3].url}`}
+                        src={`/uploads/${bien.images[4].url}`}
                         alt="Image secondaire" 
                         className="w-full h-full object-cover rounded-lg"
                         />
@@ -201,7 +255,7 @@ export default function PropertyDetails({propertie}) {
                         <div className="p-4 border border-gray-200 rounded-lg shadow-sm">
                             <div className="flex flex-col items-center">
                             <Bath className="h-8 w-8 mb-2" />
-                            <p className="font-semibold">3 salles de bain</p>
+                            <p className="font-semibold">2 salles de bain</p>
                             </div>
                         </div>
                         <div className="p-4 border border-gray-200 rounded-lg shadow-sm">
@@ -213,7 +267,7 @@ export default function PropertyDetails({propertie}) {
                         <div className="p-4 border border-gray-200 rounded-lg shadow-sm">
                             <div className="flex flex-col items-center">
                             <Home className="h-8 w-8 mb-2" />
-                            <p className="font-semibold">Moublé</p>
+                            <p className="font-semibold">{bien.type}</p>
                             </div>
                         </div>
                         </div>
@@ -223,6 +277,7 @@ export default function PropertyDetails({propertie}) {
                     <div className="mb-8">
                         <h2 className="text-2xl font-semibold mb-4">Description</h2>
                         <p className="text-gray-600 leading-relaxed">
+                            {bien.description}
                         Magnifique villa moderne située dans un quartier prisé de Nice, offrant une vue imprenable sur la mer Méditerranée. Cette propriété d'exception de 200m² dispose de 4 chambres spacieuses, 3 salles de bain luxueuses et de nombreux équipements haut de gamme. La villa bénéficie d'une exposition sud-ouest idéale et d'un jardin paysager de 800m².
                         </p>
                     </div>
@@ -247,45 +302,68 @@ export default function PropertyDetails({propertie}) {
                 
                 {/* Formulaire de contact */}
                 <div className="relative">
-                    <div className="sticky top-8 p-6 border border-gray-200 rounded-lg shadow-lg bg-white">
+                    {error && (
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                        {error}
+                    </div>
+                    )}
+                    
+                    {success && (
+                    <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+                        Message envoyé avec succès !
+                    </div>
+                    )}
+                    <form onSubmit={handleSubmit} className="sticky top-8 p-6 border border-gray-200 rounded-lg shadow-lg bg-white">
                         <h3 className="text-xl font-semibold mb-4">Contacter le propriétaire</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2">Nom</label>
                                 <input 
-                                type="text"
-                                placeholder="Votre nom"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:gray-500 outline-none transition-colors"
+                                    type="text"
+                                    placeholder="Votre nom"
+                                    className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:border-gray-500 outline-none transition-colors ${user ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                    value={user ? `${user.nom} ${user.prenom}` : ''}
+                                    disabled={!!user} 
                                 />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-2">Email</label>
                                 <input 
-                                type="email"
-                                placeholder="Votre email"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:gray-500 outline-none transition-colors"
+                                    type="email"
+                                    placeholder="Votre email"
+                                    className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:border-gray-500 outline-none transition-colors ${user ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                    value={user ? user.email : ''}
+                                    disabled={!!user} 
                                 />
                             </div>
+
                             <div>
                                 <label className="block text-sm font-medium mb-2">Téléphone</label>
                                 <input 
-                                type="tel"
-                                placeholder="Votre téléphone"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:gray-500 outline-none transition-colors"
+                                    type="tel"
+                                    placeholder="Votre téléphone"
+                                    className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:border-gray-500 outline-none transition-colors ${user ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                    value={user ? user.phone : ''}
+                                    disabled={!!user} 
                                 />
                             </div>
+
                             <div>
                                 <label className="block text-sm font-medium mb-2">Message</label>
                                 <textarea 
                                 placeholder="Votre message"
                                 className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-500 focus:gray-500 outline-none transition-colors resize-none"
+                                value={message} 
+                                onChange={(e) => setMessage(e.target.value)} 
                                 />
                             </div>
-                            <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                                Envoyer
+                            <button 
+                                type="submit"
+                                className="w-full px-4 py-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                                {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 

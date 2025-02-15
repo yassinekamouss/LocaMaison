@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Mes sauvegardes
+{% endblock %}
+
+{% block main %}
+    
+    <div class="bg-gray-100"
+        {{ react_component('Favoris/Favori',
+            {"isAuthenticated": is_granted('IS_AUTHENTICATED'),
+            "data": data},
+            {permanent:true}) }}>
+        Loading...
+    </div>
+
+{% endblock %}

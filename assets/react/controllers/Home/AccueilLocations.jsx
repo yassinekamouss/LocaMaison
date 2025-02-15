@@ -11,7 +11,7 @@ export default function AccueilLocations() {
     const [showMap, setShowMap] = useState(false); // État pour afficher la carte
     const [filterCriteria, setFilterCriteria] = useState({ // Critères de filtrage
         propertyType: [],
-        maxPrice: 10000,
+        maxPrice: 100000,
         roomCount: [],
         amenities: []
     });
@@ -23,7 +23,7 @@ export default function AccueilLocations() {
             if (!response.ok) {
             throw new Error("Erreur lors du chargement des biens");
             }
-            return response.json(); // Convertir la réponse en JSON
+            return response.json();
         })
         .then((data) => {
             setRentals(data);
