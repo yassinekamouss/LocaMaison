@@ -24,10 +24,10 @@ export default function AnnonceForm() {
   useEffect(() => {
     const fetchEquipements = async () => {
         try {
-            const response = await axios.get('/equipements'); // Use axios.get
-            setEquipementsList(response.data); // Access data with response.data
+            const response = await axios.get('/equipements'); 
+            setEquipementsList(response.data);
         } catch (error) {
-            console.error('Erreur lors de la récupération des équipements:', error); // Improved error message
+            console.error('Erreur lors de la récupération des équipements:', error);
         }
     };
 

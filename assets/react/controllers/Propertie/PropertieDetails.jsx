@@ -42,7 +42,6 @@ export default function PropertyDetails({propertie, user}) {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-console.log(user);
     const bien = JSON.parse(propertie);
     const equipements = {
         "Climatisation et Chauffage": AirVent,
