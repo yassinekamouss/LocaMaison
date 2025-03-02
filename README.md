@@ -42,14 +42,14 @@ Bienvenue sur la plateforme de location de maisons en ligne, un projet permettan
    ```bash
    composer install
 3. **Installer les dépendances React (Front-end)**
-```bash
-npm install
-3. **Configurer la base de données**
+   ```bash
+   npm install
+4. **Configurer la base de données**
 - Renommer .env.example en .env
 - Modifier les valeurs pour correspondre à votre configuration MySQL
 - Exécuter les migrations :
    ```bash
    php bin/console doctrine:migrations:migrate
-4. **Démarrer le serveur Symfony**
+5. **Démarrer le serveur Symfony**
 ```bash
 symfony server:start
