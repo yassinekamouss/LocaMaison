@@ -51,5 +51,5 @@ Bienvenue sur la plateforme de location de maisons en ligne, un projet permettan
    ```bash
    php bin/console doctrine:migrations:migrate
 5. **Démarrer le serveur Symfony**
-```bash
-symfony server:start
+   ```bash
+   symfony server:start
