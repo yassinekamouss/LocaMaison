@@ -4,7 +4,7 @@ Bienvenue sur la plateforme de location de maisons en ligne, un projet permettan
 
 ## 📸 Aperçu du Projet
 
-![Aperçu de l'application](assets/screenshot.png)
+![Aperçu de l'application](https://github.com/yassinekamouss/LocaMaison/blob/ced4484c968e362dc36631bdd7e9cfa4a13a1db9/Capture%20d'%C3%A9cran%202025-03-02%20122432.png)
 
 ## 🚀 Fonctionnalités Principales
 
